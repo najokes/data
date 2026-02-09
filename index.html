@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-платформа управления инвестициями</title>
+    <title>База данных компаний - AI-платформа управления инвестициями</title>
     <style>
         * {
             margin: 0;
@@ -25,53 +25,65 @@
             border-radius: 12px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
             overflow: hidden;
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 0;
             border: 1px solid #e0e0e0;
         }
         
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-        
         header {
-            grid-column: 1 / -1;
             background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
             color: white;
-            padding: 24px;
+            padding: 30px;
             text-align: center;
             border-bottom: 1px solid #3949ab;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .header-content {
-            flex: 1;
-            min-width: 300px;
         }
         
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 8px;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
             color: white;
             font-weight: 600;
         }
         
         .subtitle {
             opacity: 0.9;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: #bbdefb;
+            margin-bottom: 25px;
+        }
+        
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 200px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
         }
         
         .header-actions {
             display: flex;
-            gap: 15px;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
             flex-wrap: wrap;
         }
         
@@ -79,22 +91,22 @@
             background: rgba(255, 255, 255, 0.15);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 0.95rem;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             white-space: nowrap;
         }
         
         .header-btn:hover {
             background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .header-btn.primary {
@@ -106,477 +118,93 @@
             background: linear-gradient(135deg, #ff5573 0%, #e94560 100%);
         }
         
-        .input-section {
-            background: #f8fafc;
-            padding: 25px;
-            border-right: 1px solid #e0e0e0;
-            height: calc(100vh - 180px);
-            overflow-y: auto;
-            position: relative;
+        .main-content {
+            padding: 30px;
         }
         
-        .results-section {
-            padding: 25px;
-            height: calc(100vh - 180px);
-            overflow-y: auto;
-            background: white;
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
         
         .section-title {
             color: #1a237e;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e94560;
-            font-size: 1.3rem;
+            font-size: 1.8rem;
             font-weight: 600;
+        }
+        
+        .search-filter-container {
             display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .section-title::before {
-            content: '';
-            width: 6px;
-            height: 24px;
-            background: #e94560;
-            border-radius: 3px;
-        }
-        
-        .company-selector {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-        }
-        
-        .company-info {
-            display: flex;
-            align-items: center;
             gap: 20px;
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
         }
         
-        .company-logo {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.4rem;
-            border: 3px solid white;
-            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.2);
-            flex-shrink: 0;
-        }
-        
-        .company-details h3 {
-            color: #1a237e;
-            margin-bottom: 8px;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .company-details p {
-            color: #666;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        
-        .company-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .stat-item {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #e9ecef;
-        }
-        
-        .stat-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #1a237e;
-            margin-bottom: 4px;
-        }
-        
-        .stat-label {
-            font-size: 0.8rem;
-            color: #666;
-            font-weight: 500;
-        }
-        
-        .inn-input-container {
-            margin-bottom: 20px;
-        }
-        
-        .inn-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 1px solid #ddd;
+        .search-input {
+            padding: 12px 20px;
+            border: 1px solid #c5cae9;
             border-radius: 8px;
             font-size: 1rem;
+            min-width: 300px;
             transition: all 0.3s;
-            background: white;
-            color: #333;
-            margin-bottom: 10px;
-            border: 1px solid #c5cae9;
         }
         
-        .inn-input:focus {
+        .search-input:focus {
             outline: none;
             border-color: #1a237e;
             box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
         }
         
-        .search-by-inn-btn {
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
-            color: white;
-            border: none;
-            padding: 14px 20px;
+        .filter-select {
+            padding: 12px 20px;
+            border: 1px solid #c5cae9;
             border-radius: 8px;
             font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .search-by-inn-btn:hover {
-            background: linear-gradient(135deg, #283593 0%, #3949ab 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.2);
-        }
-        
-        .company-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .action-btn {
             background: white;
-            border: 2px solid #1a237e;
-            color: #1a237e;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .action-btn:hover {
-            background: #1a237e;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.2);
-        }
-        
-        .action-btn.secondary {
-            border-color: #e94560;
-            color: #e94560;
-        }
-        
-        .action-btn.secondary:hover {
-            background: #e94560;
-            color: white;
-            box-shadow: 0 5px 12px rgba(233, 69, 96, 0.2);
-        }
-        
-        .input-groups-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-top: 25px;
-        }
-        
-        .input-group-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            border: 1px solid #e0e0e0;
-            cursor: grab;
-            transition: all 0.3s ease;
-            user-select: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-        }
-        
-        .input-group-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            border-color: #1a237e;
-        }
-        
-        .input-group-card:active {
-            cursor: grabbing;
-            transform: translateY(0);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-        
-        .input-group-card.dragging {
-            opacity: 0.7;
-            transform: rotate(2deg);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .input-group-card .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .input-group-card .card-title {
-            color: #1a237e;
-            font-size: 1.2rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .drag-handle {
-            color: #999;
-            cursor: grab;
-            font-size: 1.4rem;
-            padding: 8px;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
-        
-        .drag-handle:hover {
-            color: #1a237e;
-            background: #f8f9fa;
-        }
-        
-        .drag-handle:active {
-            cursor: grabbing;
-        }
-        
-        .input-row {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .slider-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .slider-label {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-        }
-        
-        .slider-label-text {
-            font-weight: 600;
             color: #333;
-            font-size: 1rem;
+            min-width: 200px;
         }
         
-        .slider-value {
-            min-width: 60px;
-            text-align: right;
-            font-weight: 700;
-            color: #e94560;
-            font-size: 1rem;
-        }
-        
-        input[type="range"] {
-            width: 100%;
-            height: 8px;
-            -webkit-appearance: none;
-            background: #e0e0e0;
-            border-radius: 4px;
+        .filter-select:focus {
             outline: none;
-            cursor: pointer;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 22px;
-            height: 22px;
-            background: #1a237e;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        
-        input[type="range"]::-webkit-slider-thumb:hover {
-            background: #283593;
-            transform: scale(1.1);
-        }
-        
-        input[type="range"]::-moz-range-thumb {
-            width: 22px;
-            height: 22px;
-            background: #1a237e;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 3px solid white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        
-        .suffix {
-            margin-left: 5px;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        
-        .calculate-btn {
-            background: linear-gradient(135deg, #e94560 0%, #c1223d 100%);
-            color: white;
-            border: none;
-            padding: 18px 30px;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 25px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .calculate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.25);
-        }
-        
-        .calculate-btn:disabled {
-            background: #aaa;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-            opacity: 0.6;
-        }
-        
-        .recalculate-btn {
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
-            color: white;
-            border: none;
-            padding: 16px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 15px;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .recalculate-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(26, 35, 126, 0.25);
-        }
-        
-        .export-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .export-btn {
-            background: white;
-            border: 2px solid #1a237e;
-            color: #1a237e;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .export-btn:hover {
-            background: #1a237e;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.2);
-        }
-        
-        .export-btn:disabled {
-            background: #f9f9f9;
-            border-color: #ccc;
-            color: #999;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .results-container {
-            height: 100%;
-            overflow-y: auto;
+            border-color: #1a237e;
         }
         
         /* Таблица компаний */
         .companies-table-container {
             background: white;
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
             border: 1px solid #e0e0e0;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
         }
         
         .companies-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
         }
         
         .companies-table th {
             background: #f8f9fa;
             color: #1a237e;
-            padding: 15px;
+            padding: 20px;
             text-align: left;
             font-weight: 600;
             border-bottom: 2px solid #e0e0e0;
             position: sticky;
             top: 0;
             z-index: 10;
+            font-size: 1.1rem;
         }
         
         .companies-table td {
-            padding: 12px 15px;
+            padding: 18px 20px;
             border-bottom: 1px solid #f0f0f0;
             color: #333;
+            font-size: 1rem;
         }
         
         .companies-table tr:hover {
@@ -593,16 +221,52 @@
             transform: translateX(3px);
         }
         
-        .company-row.selected {
-            background-color: #e3f2fd !important;
-            border-left: 4px solid #1a237e;
+        .company-logo-cell {
+            width: 50px;
+        }
+        
+        .company-logo-small {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .company-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .company-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .company-name {
+            font-weight: 600;
+            color: #1a237e;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .company-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.4;
         }
         
         .sector-badge {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 6px 14px;
             border-radius: 12px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 500;
         }
         
@@ -642,338 +306,72 @@
             border: 1px solid rgba(255, 107, 53, 0.2);
         }
         
-        .company-logo-small {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-            margin-right: 10px;
-        }
-        
-        .company-name-cell {
-            display: flex;
-            align-items: center;
-        }
-        
         .metric-value-cell {
             text-align: right;
             font-weight: 600;
-            color: #1a237e;
+        }
+        
+        .roi-cell {
+            font-size: 1.2rem;
+            font-weight: 700;
         }
         
         .roi-positive {
             color: #27ae60;
-            font-weight: 700;
         }
         
         .roi-negative {
             color: #e74c3c;
-            font-weight: 700;
         }
         
-        .metric-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .metric-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            transition: transform 0.3s;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-        
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        }
-        
-        .metric-title {
-            font-size: 0.95rem;
-            color: #1a237e;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .metric-value {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #e94560;
-            margin-bottom: 5px;
-        }
-        
-        .metric-subtitle {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 5px;
-        }
-        
-        .algorithm-results {
+        .inn-cell {
+            font-family: monospace;
             background: #f8f9fa;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
         }
         
-        .algorithm-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-            border-left: 5px solid #1a237e;
-            transition: transform 0.3s;
-        }
-        
-        .algorithm-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-        }
-        
-        .algorithm-header {
+        .pagination {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
             align-items: center;
-            margin-bottom: 20px;
         }
         
-        .algorithm-name {
-            font-weight: 700;
-            color: #1a237e;
-            font-size: 1.1rem;
-        }
-        
-        .algorithm-accuracy {
-            background: rgba(233, 69, 96, 0.1);
-            color: #e94560;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            border: 1px solid rgba(233, 69, 96, 0.3);
-            font-weight: 600;
-        }
-        
-        .algorithm-details {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-        
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px dashed #f0f0f0;
-        }
-        
-        .detail-item span {
+        .page-btn {
+            padding: 10px 16px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 8px;
             color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
             font-weight: 500;
         }
         
-        .detail-item strong {
-            color: #1a237e;
-            font-weight: 700;
+        .page-btn:hover:not(:disabled) {
+            background: #e9ecef;
+            transform: translateY(-2px);
         }
         
-        .kpi-section {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 25px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-        }
-        
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .kpi-item {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid #f0f0f0;
-            transition: transform 0.3s;
-        }
-        
-        .kpi-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-        }
-        
-        .kpi-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-        
-        .kpi-header span:first-child {
-            color: #1a237e;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        
-        .kpi-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #e94560;
-        }
-        
-        .kpi-change {
-            font-size: 0.9rem;
-            padding: 6px 12px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-        
-        .positive {
-            background: rgba(39, 174, 96, 0.1);
-            color: #27ae60;
-            border: 1px solid rgba(39, 174, 96, 0.3);
-        }
-        
-        .negative {
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
-            border: 1px solid rgba(231, 76, 60, 0.3);
-        }
-        
-        .neutral {
-            background: rgba(52, 152, 219, 0.1);
-            color: #3498db;
-            border: 1px solid rgba(52, 152, 219, 0.3);
-        }
-        
-        .recommendations {
-            margin-top: 30px;
-        }
-        
-        .recommendation-card {
-            background: white;
-            border-left: 5px solid #e94560;
-            padding: 25px;
-            border-radius: 0 10px 10px 0;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-            border: 1px solid #f0f0f0;
-            transition: transform 0.3s;
-        }
-        
-        .recommendation-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.07);
-        }
-        
-        .recommendation-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-        }
-        
-        .rec-title {
-            font-weight: 700;
-            color: #1a237e;
-            font-size: 1.1rem;
-        }
-        
-        .rec-impact {
-            background: rgba(233, 69, 96, 0.1);
-            color: #e94560;
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            border: 1px solid rgba(233, 69, 96, 0.3);
-        }
-        
-        .rec-details {
-            color: #555;
-            font-size: 1rem;
-            line-height: 1.6;
-        }
-        
-        .risk-indicator {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 6px 14px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid;
-        }
-        
-        .low-risk {
-            background: rgba(39, 174, 96, 0.1);
-            color: #27ae60;
-            border-color: rgba(39, 174, 96, 0.3);
-        }
-        
-        .medium-risk {
-            background: rgba(243, 156, 18, 0.1);
-            color: #f39c12;
-            border-color: rgba(243, 156, 18, 0.3);
-        }
-        
-        .high-risk {
-            background: rgba(231, 76, 60, 0.1);
-            color: #e74c3c;
-            border-color: rgba(231, 76, 60, 0.3);
-        }
-        
-        .ai-maturity {
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+        .page-btn.active {
+            background: #1a237e;
             color: white;
-            padding: 30px;
-            border-radius: 10px;
-            margin-top: 30px;
-            text-align: center;
-            border: 1px solid #3949ab;
-            box-shadow: 0 8px 20px rgba(26, 35, 126, 0.15);
+            border-color: #1a237e;
         }
         
-        .maturity-score {
-            font-size: 3.5rem;
-            font-weight: 800;
-            margin: 15px 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
         
-        .maturity-level {
-            font-size: 1.3rem;
-            opacity: 0.95;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        
-        .maturity-scale {
+        .page-info {
+            color: #666;
             font-size: 0.95rem;
-            opacity: 0.85;
-            margin-top: 15px;
-            line-height: 1.5;
-        }
-        
-        .hidden {
-            display: none;
+            margin: 0 15px;
         }
         
         .notification {
@@ -997,12 +395,6 @@
             border-color: #27ae60;
         }
         
-        .error {
-            background: rgba(231, 76, 60, 0.95);
-            color: white;
-            border-color: #e74c3c;
-        }
-        
         .info {
             background: rgba(52, 152, 219, 0.95);
             color: white;
@@ -1019,304 +411,222 @@
             to { transform: translateX(100%); opacity: 0; }
         }
         
-        .editable-note {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 5px;
-            font-style: italic;
-        }
-        
-        .slider-changed {
-            background: #ffb8c6 !important;
-        }
-        
-        .slider-changed::-webkit-slider-thumb {
-            background: #f39c12 !important;
-            border-color: #f39c12 !important;
-        }
-        
-        .slider-changed::-moz-range-thumb {
-            background: #f39c12 !important;
-            border-color: #f39c12 !important;
-        }
-        
-        .empty-results {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            color: #777;
-            text-align: center;
-            padding: 60px 20px;
+        .export-section {
+            margin-top: 30px;
+            padding: 25px;
             background: #f8f9fa;
             border-radius: 10px;
+            border: 1px solid #e0e0e0;
+            text-align: center;
         }
         
-        .empty-results-icon {
-            font-size: 5rem;
+        .export-title {
             color: #1a237e;
-            margin-bottom: 30px;
-            opacity: 0.2;
-        }
-        
-        .empty-results h3 {
-            color: #1a237e;
+            font-size: 1.3rem;
             margin-bottom: 20px;
-            font-size: 1.8rem;
             font-weight: 600;
         }
         
-        .empty-results p {
-            color: #666;
-            max-width: 500px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
-            font-size: 1.1rem;
-        }
-        
-        .drag-instructions {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 10px;
-            text-align: center;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 2px dashed #c5cae9;
-            margin-bottom: 10px;
-        }
-        
-        .company-db-info {
-            background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 15px;
-            text-align: center;
-            border: 1px solid #9fa8da;
-        }
-        
-        .company-db-info span {
-            color: #1a237e;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        
-        .table-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .table-search {
-            flex: 1;
-            min-width: 300px;
-            padding: 10px 15px;
-            border: 1px solid #c5cae9;
-            border-radius: 8px;
-            font-size: 0.95rem;
-        }
-        
-        .table-search:focus {
-            outline: none;
-            border-color: #1a237e;
-            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
-        }
-        
-        .table-filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 8px 16px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            color: #666;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-        
-        .filter-btn:hover {
-            background: #e9ecef;
-        }
-        
-        .filter-btn.active {
-            background: #1a237e;
-            color: white;
-            border-color: #1a237e;
-        }
-        
-        .pagination {
+        .export-buttons {
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
-            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         
-        .page-btn {
-            padding: 8px 12px;
-            background: #f8f9fa;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            color: #666;
+        .export-btn {
+            background: white;
+            border: 2px solid #1a237e;
+            color: #1a237e;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
         }
         
-        .page-btn:hover:not(:disabled) {
-            background: #e9ecef;
-        }
-        
-        .page-btn.active {
+        .export-btn:hover {
             background: #1a237e;
             color: white;
-            border-color: #1a237e;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(26, 35, 126, 0.2);
         }
         
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .export-btn.secondary {
+            border-color: #e94560;
+            color: #e94560;
+        }
+        
+        .export-btn.secondary:hover {
+            background: #e94560;
+            color: white;
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.2);
+        }
+        
+        .mobile-warning {
+            display: none;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 8px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+            
+            .filter-select {
+                min-width: 100%;
+            }
+            
+            .mobile-warning {
+                display: block;
+            }
+            
+            .companies-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .header-stats {
+                gap: 15px;
+            }
+            
+            .stat-card {
+                min-width: 150px;
+                padding: 15px;
+            }
+            
+            .stat-value {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="mobile-warning">
+        📱 Для лучшего просмотра таблицы рекомендуется горизонтальная ориентация экрана или использование компьютера
+    </div>
+    
     <div class="container">
         <header>
-            <div class="header-content">
-                <h1>AI-платформа управления инвестициями</h1>
-                <p class="subtitle">База данных: 1000+ компаний с метриками для анализа</p>
+            <h1>База данных компаний</h1>
+            <p class="subtitle">AI-платформа управления инвестициями | 1247 компаний с финансовыми показателями</p>
+            
+            <div class="header-stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="statTotal">1,247</div>
+                    <div class="stat-label">Всего компаний</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statActive">934</div>
+                    <div class="stat-label">Активных (ROI > 10%)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statUpdated">Сегодня</div>
+                    <div class="stat-label">Обновлено</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statSectors">12</div>
+                    <div class="stat-label">Секторов</div>
+                </div>
             </div>
+            
             <div class="header-actions">
-                <button class="header-btn" onclick="addNewCompany()">
-                    <span style="font-size: 1.2rem;">+</span> Добавить компанию
+                <button class="header-btn" onclick="addRandomCompany()">
+                    <span style="font-size: 1.3rem;">+</span> Добавить случайную компанию
                 </button>
                 <button class="header-btn primary" onclick="loadTemplateCompanies()">
-                    📁 Загрузить шаблон CSV
+                    📁 Загрузить шаблонные компании
                 </button>
             </div>
         </header>
         
-        <div class="input-section">
-            <div class="company-selector">
-                <h2 class="section-title">Поиск компании по ИНН</h2>
-                <div class="company-info">
-                    <div class="company-logo" id="companyLogo">?</div>
-                    <div class="company-details">
-                        <h3 id="companyName">Введите ИНН компании</h3>
-                        <p id="companyDetails">Начните ввод ИНН для поиска компании в базе</p>
-                        <div class="company-stats">
-                            <div class="stat-item">
-                                <div class="stat-value" id="statCompanies">1,247</div>
-                                <div class="stat-label">Компаний в базе</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" id="statUpdated">Сегодня</div>
-                                <div class="stat-label">Обновлено</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-value" id="statActive">934</div>
-                                <div class="stat-label">Активных</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="main-content">
+            <div class="content-header">
+                <h2 class="section-title">Список компаний</h2>
                 
-                <div class="inn-input-container">
+                <div class="search-filter-container">
                     <input type="text" 
-                           class="inn-input" 
-                           id="innInput" 
-                           placeholder="Введите ИНН компании"
-                           maxlength="12">
-                </div>
-                
-                <button class="search-by-inn-btn" onclick="searchByINN()">🔍 Найти по ИНН</button>
-                
-                <div class="company-actions">
-                    <button class="action-btn" onclick="searchRandomCompany()">
-                        🎲 Случайная компания
-                    </button>
-                    <button class="action-btn secondary" onclick="showAllCompanies()">
-                        📊 Показать все
-                    </button>
-                </div>
-                
-                <div class="company-db-info">
-                    <span>В базе данных 1247 компаний с полными финансовыми показателями</span>
-                </div>
-            </div>
-            
-            <h2 class="section-title">Параметры для анализа</h2>
-            <p class="editable-note">Перетаскивайте плашки для изменения порядка. Регулируйте бегунки для изменения параметров.</p>
-            
-            <div class="drag-instructions">↕️ Перетаскивайте плашки, меняя их порядок</div>
-            
-            <div class="input-groups-container" id="inputGroupsContainer">
-                <!-- Плашки будут вставлены сюда через JavaScript -->
-            </div>
-            
-            <button class="calculate-btn" id="calculateBtn" onclick="calculateResults()" disabled>📊 Рассчитать показатели</button>
-            <button class="recalculate-btn" id="recalculateBtn" onclick="recalculateResults()" style="display: none;">🔄 Пересчитать с новыми параметрами</button>
-            
-            <div class="export-buttons">
-                <button class="export-btn" id="exportPdfBtn" onclick="exportPDF()" disabled>📄 PDF отчёт</button>
-                <button class="export-btn" id="exportExcelBtn" onclick="exportExcel()" disabled>📊 Excel данные</button>
-            </div>
-        </div>
-        
-        <div class="results-section">
-            <div class="companies-table-container">
-                <h2 class="section-title">База данных компаний</h2>
-                
-                <div class="table-actions">
-                    <input type="text" 
-                           class="table-search" 
-                           id="tableSearch" 
-                           placeholder="Поиск по названию или ИНН..."
+                           class="search-input" 
+                           id="searchInput" 
+                           placeholder="Поиск по названию, ИНН или сектору..."
                            onkeyup="searchCompanies()">
                     
-                    <div class="table-filters">
-                        <button class="filter-btn active" onclick="filterBySector('all')">Все</button>
-                        <button class="filter-btn" onclick="filterBySector('Технологии')">Технологии</button>
-                        <button class="filter-btn" onclick="filterBySector('Финансы')">Финансы</button>
-                        <button class="filter-btn" onclick="filterBySector('Ритейл')">Ритейл</button>
-                        <button class="filter-btn" onclick="filterBySector('Производство')">Производство</button>
-                    </div>
-                </div>
-                
-                <div style="overflow-x: auto;">
-                    <table class="companies-table" id="companiesTable">
-                        <thead>
-                            <tr>
-                                <th style="width: 30%;">Компания</th>
-                                <th style="width: 15%;">Сектор</th>
-                                <th style="width: 15%;">ИНН</th>
-                                <th style="width: 15%;">ROI</th>
-                                <th style="width: 15%;">Инвестиции</th>
-                                <th style="width: 10%;">Клиенты</th>
-                            </tr>
-                        </thead>
-                        <tbody id="companiesTableBody">
-                            <!-- Данные будут загружены через JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div class="pagination" id="pagination">
-                    <!-- Пагинация будет загружена через JavaScript -->
+                    <select class="filter-select" id="sectorFilter" onchange="filterBySector()">
+                        <option value="all">Все секторы</option>
+                        <option value="Технологии">Технологии</option>
+                        <option value="Финансы">Финансы</option>
+                        <option value="Ритейл">Ритейл</option>
+                        <option value="Производство">Производство</option>
+                        <option value="Энергетика">Энергетика</option>
+                        <option value="Строительство">Строительство</option>
+                        <option value="Транспорт">Транспорт</option>
+                        <option value="Здравоохранение">Здравоохранение</option>
+                    </select>
                 </div>
             </div>
             
-            <div class="results-container hidden" id="resultsContainer">
-                <!-- Результаты анализа будут вставлены сюда -->
+            <div class="companies-table-container">
+                <table class="companies-table" id="companiesTable">
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">Компания</th>
+                            <th style="width: 12%;">Сектор</th>
+                            <th style="width: 12%;">ИНН</th>
+                            <th style="width: 10%;">ROI</th>
+                            <th style="width: 12%;">Инвестиции</th>
+                            <th style="width: 9%;">Клиенты</th>
+                            <th style="width: 10%;">R&D</th>
+                        </tr>
+                    </thead>
+                    <tbody id="companiesTableBody">
+                        <!-- Данные будут загружены через JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="pagination" id="pagination">
+                <!-- Пагинация будет загружена через JavaScript -->
+            </div>
+            
+            <div class="export-section">
+                <h3 class="export-title">Экспорт данных</h3>
+                <div class="export-buttons">
+                    <button class="export-btn" onclick="exportToCSV()">
+                        📥 Экспорт в CSV
+                    </button>
+                    <button class="export-btn secondary" onclick="exportToExcel()">
+                        📊 Экспорт в Excel
+                    </button>
+                    <button class="export-btn" onclick="generateReport()">
+                        📄 Сгенерировать отчет
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1324,15 +634,11 @@
     <script>
         // Хранилище компаний
         let companiesDatabase = {};
-        let originalValues = {};
-        let currentAnalysisData = null;
-        let draggedCard = null;
-        let cardOrder = ['base', 'rd', 'customer', 'infrastructure'];
-        let currentCompanyId = null;
         let currentPage = 1;
-        const companiesPerPage = 20;
+        const companiesPerPage = 25;
         let currentFilter = 'all';
         let currentSearch = '';
+        let totalCompanies = 0;
 
         // Генератор случайных данных для компаний
         const companyDataGenerator = {
@@ -1344,6 +650,10 @@
             
             companyTypes: ["ООО", "АО", "ПАО", "ЗАО", "ИП"],
             
+            prefixes: ["Техно", "Пром", "Инвест", "Финанс", "Строй", "Энерго", "Транс", "Мед", "Агро", "Телеком"],
+            
+            suffixes: ["Групп", "Холдинг", "Альянс", "Партнер", "Капитал", "Ресурс", "Сервис", "Центр", "Системы", "Технологии"],
+            
             generateINN: () => {
                 const prefix = Math.random() > 0.5 ? "77" : "78";
                 const middle = Math.floor(Math.random() * 900000000).toString().padStart(9, '0');
@@ -1353,10 +663,8 @@
             
             generateCompanyName: () => {
                 const type = this.companyTypes[Math.floor(Math.random() * this.companyTypes.length)];
-                const prefixes = ["Техно", "Пром", "Инвест", "Финанс", "Строй", "Энерго", "Транс", "Мед", "Агро", "Телеком"];
-                const suffixes = ["Групп", "Холдинг", "Альянс", "Партнер", "Капитал", "Ресурс", "Сервис", "Центр", "Системы", "Технологии"];
-                const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-                const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+                const prefix = this.prefixes[Math.floor(Math.random() * this.prefixes.length)];
+                const suffix = this.suffixes[Math.floor(Math.random() * this.suffixes.length)];
                 return `${type} "${prefix}${suffix}"`;
             },
             
@@ -1386,43 +694,19 @@
                 companiesDatabase[inn] = {
                     id: `company_${i}`,
                     name: name,
-                    details: description,
+                    description: description,
                     sector: sector,
                     logo: name.charAt(0),
-                    color: getSectorColor(sector),
                     
-                    // Базовые показатели
-                    investmentAmount: String(metrics.investmentAmount),
-                    investmentPeriod: String(metrics.investmentPeriod),
-                    historicalRoi: String(metrics.historicalRoi),
-                    riskTolerance: String(metrics.riskTolerance),
-                    
-                    // R&D проекты
-                    rdBudget: String(metrics.rdBudget),
-                    projectCount: String(metrics.projectCount),
-                    currentRdSuccess: String(metrics.currentRdSuccess),
-                    currentPaybackPeriod: String(metrics.currentPaybackPeriod),
-                    
-                    // Клиентская база
-                    customerCount: String(metrics.customerCount),
-                    currentChurn: String(metrics.currentChurn),
-                    avgLtv: String(metrics.avgLtv),
-                    keyCustomersShare: String(metrics.keyCustomersShare),
-                    
-                    // Инфраструктура
-                    infraCapex: String(metrics.infraCapex),
-                    unplannedDowntime: String(metrics.unplannedDowntime),
-                    maintenanceCost: String(metrics.maintenanceCost),
-                    
-                    // Исторические данные
-                    historicalData: {
-                        portfolioRoi: String(metrics.historicalRoi),
-                        ineffectiveInvestments: String(metrics.ineffectiveInvestments),
-                        customerRetention: String(100 - parseFloat(metrics.currentChurn)),
-                        rdEfficiency: String(metrics.currentRdSuccess),
-                        paybackPeriod: String(metrics.currentPaybackPeriod),
-                        churnRate: String(metrics.currentChurn)
-                    }
+                    // Финансовые показатели
+                    investmentAmount: metrics.investmentAmount,
+                    historicalRoi: metrics.historicalRoi,
+                    rdBudget: metrics.rdBudget,
+                    projectCount: metrics.projectCount,
+                    customerCount: metrics.customerCount,
+                    currentChurn: metrics.currentChurn,
+                    avgLtv: metrics.avgLtv,
+                    infraCapex: metrics.infraCapex
                 };
             }
             
@@ -1430,7 +714,7 @@
             addDemoCompanies();
             
             console.log(`База данных инициализирована: ${Object.keys(companiesDatabase).length} компаний`);
-            updateDatabaseStats();
+            updateStats();
             renderCompaniesTable();
         }
 
@@ -1439,123 +723,164 @@
             const baseMetrics = {
                 "Технологии": {
                     investmentAmount: Math.floor(Math.random() * 500000000) + 50000000,
-                    investmentPeriod: 24 + Math.floor(Math.random() * 24),
                     historicalRoi: 15 + Math.random() * 20,
-                    riskTolerance: 25 + Math.random() * 15,
                     rdBudget: 25 + Math.random() * 20,
                     projectCount: Math.floor(Math.random() * 50) + 10,
-                    currentRdSuccess: 30 + Math.random() * 40,
-                    currentPaybackPeriod: 12 + Math.floor(Math.random() * 24),
                     customerCount: Math.floor(Math.random() * 500) + 50,
                     currentChurn: 5 + Math.random() * 15,
                     avgLtv: Math.floor(Math.random() * 3000000) + 500000,
-                    keyCustomersShare: 30 + Math.random() * 40,
-                    infraCapex: Math.floor(Math.random() * 50000000) + 10000000,
-                    unplannedDowntime: 3 + Math.random() * 12,
-                    maintenanceCost: Math.floor(Math.random() * 20000000) + 5000000,
-                    ineffectiveInvestments: 15 + Math.random() * 25
+                    infraCapex: Math.floor(Math.random() * 50000000) + 10000000
                 },
                 
                 "Ритейл": {
                     investmentAmount: Math.floor(Math.random() * 300000000) + 30000000,
-                    investmentPeriod: 18 + Math.floor(Math.random() * 18),
                     historicalRoi: 12 + Math.random() * 15,
-                    riskTolerance: 15 + Math.random() * 10,
                     rdBudget: 10 + Math.random() * 15,
                     projectCount: Math.floor(Math.random() * 20) + 5,
-                    currentRdSuccess: 40 + Math.random() * 30,
-                    currentPaybackPeriod: 9 + Math.floor(Math.random() * 18),
                     customerCount: Math.floor(Math.random() * 1000) + 100,
                     currentChurn: 10 + Math.random() * 20,
                     avgLtv: Math.floor(Math.random() * 800000) + 200000,
-                    keyCustomersShare: 20 + Math.random() * 30,
-                    infraCapex: Math.floor(Math.random() * 30000000) + 5000000,
-                    unplannedDowntime: 5 + Math.random() * 10,
-                    maintenanceCost: Math.floor(Math.random() * 15000000) + 3000000,
-                    ineffectiveInvestments: 20 + Math.random() * 25
+                    infraCapex: Math.floor(Math.random() * 30000000) + 5000000
                 },
                 
                 "Производство": {
                     investmentAmount: Math.floor(Math.random() * 800000000) + 100000000,
-                    investmentPeriod: 36 + Math.floor(Math.random() * 36),
                     historicalRoi: 10 + Math.random() * 12,
-                    riskTolerance: 20 + Math.random() * 15,
                     rdBudget: 15 + Math.random() * 20,
                     projectCount: Math.floor(Math.random() * 30) + 8,
-                    currentRdSuccess: 35 + Math.random() * 30,
-                    currentPaybackPeriod: 24 + Math.floor(Math.random() * 36),
                     customerCount: Math.floor(Math.random() * 300) + 30,
                     currentChurn: 8 + Math.random() * 12,
                     avgLtv: Math.floor(Math.random() * 2000000) + 500000,
-                    keyCustomersShare: 25 + Math.random() * 35,
-                    infraCapex: Math.floor(Math.random() * 100000000) + 20000000,
-                    unplannedDowntime: 8 + Math.random() * 15,
-                    maintenanceCost: Math.floor(Math.random() * 30000000) + 8000000,
-                    ineffectiveInvestments: 25 + Math.random() * 25
+                    infraCapex: Math.floor(Math.random() * 100000000) + 20000000
                 },
                 
                 "Финансы": {
                     investmentAmount: Math.floor(Math.random() * 1000000000) + 100000000,
-                    investmentPeriod: 24 + Math.floor(Math.random() * 24),
                     historicalRoi: 18 + Math.random() * 25,
-                    riskTolerance: 30 + Math.random() * 10,
                     rdBudget: 20 + Math.random() * 25,
                     projectCount: Math.floor(Math.random() * 40) + 10,
-                    currentRdSuccess: 45 + Math.random() * 35,
-                    currentPaybackPeriod: 18 + Math.floor(Math.random() * 24),
                     customerCount: Math.floor(Math.random() * 200) + 50,
                     currentChurn: 12 + Math.random() * 15,
                     avgLtv: Math.floor(Math.random() * 5000000) + 1000000,
-                    keyCustomersShare: 35 + Math.random() * 40,
-                    infraCapex: Math.floor(Math.random() * 20000000) + 5000000,
-                    unplannedDowntime: 2 + Math.random() * 8,
-                    maintenanceCost: Math.floor(Math.random() * 10000000) + 2000000,
-                    ineffectiveInvestments: 18 + Math.random() * 22
+                    infraCapex: Math.floor(Math.random() * 20000000) + 5000000
                 }
             };
             
             const defaultMetrics = {
                 investmentAmount: Math.floor(Math.random() * 500000000) + 50000000,
-                investmentPeriod: 24 + Math.floor(Math.random() * 24),
                 historicalRoi: 12 + Math.random() * 18,
-                riskTolerance: 20 + Math.random() * 15,
                 rdBudget: 15 + Math.random() * 20,
                 projectCount: Math.floor(Math.random() * 30) + 10,
-                currentRdSuccess: 35 + Math.random() * 35,
-                currentPaybackPeriod: 18 + Math.floor(Math.random() * 30),
                 customerCount: Math.floor(Math.random() * 500) + 50,
                 currentChurn: 8 + Math.random() * 15,
                 avgLtv: Math.floor(Math.random() * 2000000) + 300000,
-                keyCustomersShare: 25 + Math.random() * 35,
-                infraCapex: Math.floor(Math.random() * 50000000) + 10000000,
-                unplannedDowntime: 5 + Math.random() * 12,
-                maintenanceCost: Math.floor(Math.random() * 20000000) + 5000000,
-                ineffectiveInvestments: 20 + Math.random() * 25
+                infraCapex: Math.floor(Math.random() * 50000000) + 10000000
             };
             
             return baseMetrics[sector] || defaultMetrics;
         }
 
-        // Цвета для секторов
-        function getSectorColor(sector) {
-            const colors = {
-                "Технологии": "#4285f4",
-                "Ритейл": "#ea4335",
-                "Производство": "#fbbc05",
-                "Финансы": "#34a853",
-                "Энергетика": "#8b4513",
-                "Строительство": "#ff6b35",
-                "Транспорт": "#4a4e69",
-                "Здравоохранение": "#9d4edd",
-                "Телекоммуникации": "#0077b6",
-                "Недвижимость": "#fb8500",
-                "Сельское хозяйство": "#386641",
-                "Образование": "#7209b7"
+        // Добавление демонстрационных компаний
+        function addDemoCompanies() {
+            // ООО "Мобайл Парк ИТ"
+            companiesDatabase["7707049388"] = {
+                id: "mobit",
+                name: "ООО 'Мобайл Парк ИТ' (МПИТ)",
+                description: "Технологическая компания, IoT и телематические решения, PaaS платформа, 250+ сотрудников",
+                sector: "Технологии",
+                logo: "М",
+                investmentAmount: 280000000,
+                historicalRoi: 15.0,
+                rdBudget: 28,
+                projectCount: 45,
+                customerCount: 500,
+                currentChurn: 10.0,
+                avgLtv: 1050000,
+                infraCapex: 35000000
             };
-            return colors[sector] || "#1a237e";
+            
+            // Еще несколько известных компаний для демонстрации
+            const demoCompanies = [
+                {
+                    inn: "7710140679",
+                    name: "ПАО 'Газпром'",
+                    description: "Крупнейшая газовая компания России, мировой лидер в энергетическом секторе",
+                    sector: "Энергетика",
+                    logo: "Г"
+                },
+                {
+                    inn: "7707049398",
+                    name: "АО 'Яндекс'",
+                    description: "Крупнейшая IT-компания России, интернет-поиск, технологии и транспорт",
+                    sector: "Технологии",
+                    logo: "Я"
+                },
+                {
+                    inn: "7702070139",
+                    name: "ПАО 'Сбербанк'",
+                    description: "Крупнейший банк России, финансовые услуги, технологии",
+                    sector: "Финансы",
+                    logo: "С"
+                },
+                {
+                    inn: "7724008320",
+                    name: "ООО 'Магнит'",
+                    description: "Крупнейшая розничная сеть России, продукты питания, товары повседневного спроса",
+                    sector: "Ритейл",
+                    logo: "М"
+                },
+                {
+                    inn: "7830002293",
+                    name: "ПАО 'Лукойл'",
+                    description: "Одна из крупнейших нефтяных компаний России, добыча и переработка нефти",
+                    sector: "Энергетика",
+                    logo: "Л"
+                }
+            ];
+            
+            demoCompanies.forEach((company, index) => {
+                const sector = company.sector;
+                const metrics = generateSectorMetrics(sector);
+                
+                companiesDatabase[company.inn] = {
+                    id: `demo_${index}`,
+                    name: company.name,
+                    description: company.description,
+                    sector: sector,
+                    logo: company.logo,
+                    investmentAmount: metrics.investmentAmount,
+                    historicalRoi: metrics.historicalRoi,
+                    rdBudget: metrics.rdBudget,
+                    projectCount: metrics.projectCount,
+                    customerCount: metrics.customerCount,
+                    currentChurn: metrics.currentChurn,
+                    avgLtv: metrics.avgLtv,
+                    infraCapex: metrics.infraCapex
+                };
+            });
         }
 
-        // Класс для бейджа сектора
+        // Форматирование чисел
+        function formatNumber(num) {
+            if (!num && num !== 0) return '—';
+            const numValue = typeof num === 'number' ? num : parseFloat(num);
+            if (isNaN(numValue)) return '—';
+            
+            if (numValue >= 1000000000) {
+                return (numValue / 1000000000).toFixed(2).replace('.', ',') + ' млрд';
+            }
+            
+            if (numValue >= 1000000) {
+                return (numValue / 1000000).toFixed(1).replace('.', ',') + ' млн';
+            }
+            
+            return numValue.toLocaleString('ru-RU', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        }
+
+        // Получить класс для сектора
         function getSectorClass(sector) {
             const classes = {
                 "Технологии": "sector-tech",
@@ -1574,158 +899,47 @@
             return classes[sector] || "sector-tech";
         }
 
-        // Добавление демонстрационных компаний
-        function addDemoCompanies() {
-            // ООО "Мобайл Парк ИТ"
-            companiesDatabase["7707049388"] = {
-                id: "mobit",
-                name: "ООО 'Мобайл Парк ИТ' (МПИТ)",
-                details: "Технологическая компания, IoT и телематические решения, PaaS платформа, 250+ сотрудников",
-                sector: "Технологии",
-                logo: "М",
-                color: "#e94560",
-                // Базовые показатели из ВКР
-                investmentAmount: "280000000",
-                investmentPeriod: "36",
-                historicalRoi: "15.0",
-                riskTolerance: "22",
-                // R&D проекты из ВКР
-                rdBudget: "28",
-                projectCount: "45",
-                currentRdSuccess: "40",
-                currentPaybackPeriod: "24",
-                // Клиентская база из ВКР
-                customerCount: "500",
-                currentChurn: "10.0",
-                avgLtv: "1050000",
-                keyCustomersShare: "48",
-                // Инфраструктура из ВКР
-                infraCapex: "35000000",
-                unplannedDowntime: "8.2",
-                maintenanceCost: "18000000",
-                // Исторические данные до внедрения ИИ из ВКР
-                historicalData: {
-                    portfolioRoi: "15.0",
-                    ineffectiveInvestments: "25.0",
-                    customerRetention: "90.0",
-                    rdEfficiency: "40",
-                    paybackPeriod: "24",
-                    churnRate: "10.0"
-                },
-                // Данные после внедрения ИИ из ВКР
-                aiResults: {
-                    roiWithAI: "21.0",
-                    churnWithAI: "7.0",
-                    rdEfficiencyWithAI: "65",
-                    paybackWithAI: "19"
-                }
+        // Получить цвет для логотипа на основе сектора
+        function getSectorColor(sector) {
+            const colors = {
+                "Технологии": "#4285f4",
+                "Ритейл": "#ea4335",
+                "Производство": "#fbbc05",
+                "Финансы": "#34a853",
+                "Энергетика": "#8b4513",
+                "Строительство": "#ff6b35",
+                "Транспорт": "#4a4e69",
+                "Здравоохранение": "#9d4edd",
+                "Телекоммуникации": "#0077b6",
+                "Недвижимость": "#fb8500",
+                "Сельское хозяйство": "#386641",
+                "Образование": "#7209b7"
             };
-            
-            // Еще несколько известных компаний для демонстрации
-            const demoCompanies = [
-                {
-                    inn: "7710140679",
-                    name: "ПАО 'Газпром'",
-                    details: "Крупнейшая газовая компания России, мировой лидер в энергетическом секторе",
-                    sector: "Энергетика",
-                    logo: "Г"
-                },
-                {
-                    inn: "7707049398",
-                    name: "АО 'Яндекс'",
-                    details: "Крупнейшая IT-компания России, интернет-поиск, технологии и транспорт",
-                    sector: "Технологии",
-                    logo: "Я"
-                },
-                {
-                    inn: "7702070139",
-                    name: "ПАО 'Сбербанк'",
-                    details: "Крупнейший банк России, финансовые услуги, технологии",
-                    sector: "Финансы",
-                    logo: "С"
-                },
-                {
-                    inn: "7724008320",
-                    name: "ООО 'Магнит'",
-                    details: "Крупнейшая розничная сеть России, продукты питания, товары повседневного спроса",
-                    sector: "Ритейл",
-                    logo: "М"
-                },
-                {
-                    inn: "7830002293",
-                    name: "ПАО 'Лукойл'",
-                    details: "Одна из крупнейших нефтяных компаний России, добыча и переработка нефти",
-                    sector: "Энергетика",
-                    logo: "Л"
-                }
-            ];
-            
-            demoCompanies.forEach((company, index) => {
-                const sector = company.sector;
-                const metrics = generateSectorMetrics(sector);
-                
-                companiesDatabase[company.inn] = {
-                    id: `demo_${index}`,
-                    name: company.name,
-                    details: company.details,
-                    sector: sector,
-                    logo: company.logo,
-                    color: getSectorColor(sector),
-                    
-                    // Базовые показатели
-                    investmentAmount: String(metrics.investmentAmount),
-                    investmentPeriod: String(metrics.investmentPeriod),
-                    historicalRoi: String(metrics.historicalRoi),
-                    riskTolerance: String(metrics.riskTolerance),
-                    
-                    // R&D проекты
-                    rdBudget: String(metrics.rdBudget),
-                    projectCount: String(metrics.projectCount),
-                    currentRdSuccess: String(metrics.currentRdSuccess),
-                    currentPaybackPeriod: String(metrics.currentPaybackPeriod),
-                    
-                    // Клиентская база
-                    customerCount: String(metrics.customerCount),
-                    currentChurn: String(metrics.currentChurn),
-                    avgLtv: String(metrics.avgLtv),
-                    keyCustomersShare: String(metrics.keyCustomersShare),
-                    
-                    // Инфраструктура
-                    infraCapex: String(metrics.infraCapex),
-                    unplannedDowntime: String(metrics.unplannedDowntime),
-                    maintenanceCost: String(metrics.maintenanceCost),
-                    
-                    // Исторические данные
-                    historicalData: {
-                        portfolioRoi: String(metrics.historicalRoi),
-                        ineffectiveInvestments: String(metrics.ineffectiveInvestments),
-                        customerRetention: String(100 - parseFloat(metrics.currentChurn)),
-                        rdEfficiency: String(metrics.currentRdSuccess),
-                        paybackPeriod: String(metrics.currentPaybackPeriod),
-                        churnRate: String(metrics.currentChurn)
-                    }
-                };
-            });
+            return colors[sector] || "#1a237e";
         }
 
-        // Форматирование чисел
-        function formatNumber(num) {
-            if (!num && num !== 0) return '—';
-            const numValue = typeof num === 'string' ? parseFloat(num.replace(/\s/g, '').replace('₽', '').replace('млн', '').replace(',', '.')) : num;
-            if (isNaN(numValue)) return '—';
+        // Обновление статистики
+        function updateStats() {
+            const totalCompanies = Object.keys(companiesDatabase).length;
             
-            if (numValue >= 1000000000) {
-                return (numValue / 1000000000).toFixed(2).replace('.', ',') + ' млрд';
-            }
-            
-            if (numValue >= 1000000) {
-                return (numValue / 1000000).toFixed(1).replace('.', ',') + ' млн';
-            }
-            
-            return numValue.toLocaleString('ru-RU', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
+            // Подсчет активных компаний (ROI > 10%)
+            let activeCount = 0;
+            Object.values(companiesDatabase).forEach(company => {
+                if (company.historicalRoi > 10) {
+                    activeCount++;
+                }
             });
+            
+            // Подсчет уникальных секторов
+            const sectors = new Set();
+            Object.values(companiesDatabase).forEach(company => {
+                sectors.add(company.sector);
+            });
+            
+            document.getElementById('statTotal').textContent = totalCompanies.toLocaleString();
+            document.getElementById('statActive').textContent = activeCount.toLocaleString();
+            document.getElementById('statUpdated').textContent = new Date().toLocaleDateString('ru-RU');
+            document.getElementById('statSectors').textContent = sectors.size;
         }
 
         // Рендеринг таблицы компаний
@@ -1734,25 +948,26 @@
             const pagination = document.getElementById('pagination');
             
             // Фильтрация компаний
-            let filteredCompanies = Object.values(companiesDatabase);
+            let filteredCompanies = Object.entries(companiesDatabase).map(([inn, company]) => ({ inn, ...company }));
             
             // Применение фильтра по сектору
             if (currentFilter !== 'all') {
-                filteredCompanies = filteredCompanies.filter(company => company.sector === currentFilter);
+                filteredCompanies = filteredCompanies.filter(item => item.sector === currentFilter);
             }
             
             // Применение поиска
             if (currentSearch) {
                 const searchLower = currentSearch.toLowerCase();
-                filteredCompanies = filteredCompanies.filter(company => 
-                    company.name.toLowerCase().includes(searchLower) || 
-                    company.sector.toLowerCase().includes(searchLower) ||
-                    Object.keys(companiesDatabase).find(inn => inn.includes(currentSearch) && companiesDatabase[inn] === company)
+                filteredCompanies = filteredCompanies.filter(item => 
+                    item.name.toLowerCase().includes(searchLower) || 
+                    item.sector.toLowerCase().includes(searchLower) ||
+                    item.inn.includes(currentSearch) ||
+                    item.description.toLowerCase().includes(searchLower)
                 );
             }
             
             // Общее количество компаний
-            const totalCompanies = filteredCompanies.length;
+            totalCompanies = filteredCompanies.length;
             const totalPages = Math.ceil(totalCompanies / companiesPerPage);
             
             // Пагинация
@@ -1764,31 +979,33 @@
             tableBody.innerHTML = '';
             
             // Заполнение таблицы
-            companiesToShow.forEach((company, index) => {
-                const inn = Object.keys(companiesDatabase).find(key => companiesDatabase[key] === company);
-                const roi = parseFloat(company.historicalRoi);
+            companiesToShow.forEach((company) => {
+                const roi = company.historicalRoi;
                 const roiClass = roi >= 15 ? 'roi-positive' : (roi >= 10 ? '' : 'roi-negative');
+                const sectorColor = getSectorColor(company.sector);
                 
                 const row = document.createElement('tr');
                 row.className = 'company-row';
-                row.dataset.inn = inn;
-                row.onclick = () => selectCompanyFromTable(inn);
+                row.onclick = () => showCompanyDetails(company.inn);
                 
                 row.innerHTML = `
                     <td>
                         <div class="company-name-cell">
-                            <div class="company-logo-small" style="background: linear-gradient(135deg, ${company.color} 0%, ${company.color}99 100%);">${company.logo}</div>
-                            <div>
-                                <div style="font-weight: 600; color: #1a237e;">${company.name}</div>
-                                <div style="font-size: 0.85rem; color: #666; margin-top: 4px;">${company.details.substring(0, 60)}...</div>
+                            <div class="company-logo-small" style="background: linear-gradient(135deg, ${sectorColor} 0%, ${sectorColor}99 100%);">
+                                ${company.logo}
+                            </div>
+                            <div class="company-info">
+                                <div class="company-name">${company.name}</div>
+                                <div class="company-desc">${company.description}</div>
                             </div>
                         </div>
                     </td>
                     <td><span class="sector-badge ${getSectorClass(company.sector)}">${company.sector}</span></td>
-                    <td><code style="background: #f8f9fa; padding: 4px 8px; border-radius: 4px;">${inn}</code></td>
-                    <td class="metric-value-cell ${roiClass}">${roi.toFixed(1)}%</td>
-                    <td class="metric-value-cell">${formatNumber(parseInt(company.investmentAmount))}</td>
-                    <td class="metric-value-cell">${parseInt(company.customerCount).toLocaleString()}</td>
+                    <td><div class="inn-cell">${company.inn}</div></td>
+                    <td class="metric-value-cell roi-cell ${roiClass}">${roi.toFixed(1)}%</td>
+                    <td class="metric-value-cell">${formatNumber(company.investmentAmount)}</td>
+                    <td class="metric-value-cell">${company.customerCount.toLocaleString()}</td>
+                    <td class="metric-value-cell">${company.rdBudget}%</td>
                 `;
                 
                 tableBody.appendChild(row);
@@ -1798,27 +1015,19 @@
             renderPagination(pagination, totalPages, currentPage);
             
             // Обновление статистики
-            document.getElementById('statCompanies').textContent = Object.keys(companiesDatabase).length.toLocaleString();
-            document.getElementById('statUpdated').textContent = new Date().toLocaleDateString('ru-RU');
-            
-            // Подсчет "активных" компаний (ROI > 10%)
-            let activeCount = 0;
-            Object.values(companiesDatabase).forEach(company => {
-                if (parseFloat(company.historicalRoi) > 10) {
-                    activeCount++;
-                }
-            });
-            document.getElementById('statActive').textContent = activeCount.toLocaleString();
+            updateStats();
         }
 
         // Рендеринг пагинации
         function renderPagination(container, totalPages, currentPage) {
             container.innerHTML = '';
             
+            if (totalPages <= 1) return;
+            
             // Кнопка "Назад"
             const prevBtn = document.createElement('button');
             prevBtn.className = 'page-btn';
-            prevBtn.innerHTML = '←';
+            prevBtn.innerHTML = '← Назад';
             prevBtn.disabled = currentPage === 1;
             prevBtn.onclick = () => {
                 if (currentPage > 1) {
@@ -1828,25 +1037,16 @@
             };
             container.appendChild(prevBtn);
             
-            // Страницы
-            const startPage = Math.max(1, currentPage - 2);
-            const endPage = Math.min(totalPages, startPage + 4);
-            
-            for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                pageBtn.textContent = i;
-                pageBtn.onclick = () => {
-                    currentPage = i;
-                    renderCompaniesTable();
-                };
-                container.appendChild(pageBtn);
-            }
+            // Информация о странице
+            const pageInfo = document.createElement('span');
+            pageInfo.className = 'page-info';
+            pageInfo.textContent = `Страница ${currentPage} из ${totalPages}`;
+            container.appendChild(pageInfo);
             
             // Кнопка "Вперед"
             const nextBtn = document.createElement('button');
             nextBtn.className = 'page-btn';
-            nextBtn.innerHTML = '→';
+            nextBtn.innerHTML = 'Вперед →';
             nextBtn.disabled = currentPage === totalPages;
             nextBtn.onclick = () => {
                 if (currentPage < totalPages) {
@@ -1857,615 +1057,55 @@
             container.appendChild(nextBtn);
         }
 
-        // Выбор компании из таблицы
-        function selectCompanyFromTable(inn) {
-            document.getElementById('innInput').value = inn;
-            searchByINN();
-            
-            // Подсветка выбранной строки
-            document.querySelectorAll('.company-row').forEach(row => {
-                row.classList.remove('selected');
-                if (row.dataset.inn === inn) {
-                    row.classList.add('selected');
-                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            });
-        }
-
-        // Поиск по таблице
+        // Поиск компаний
         function searchCompanies() {
-            currentSearch = document.getElementById('tableSearch').value;
+            currentSearch = document.getElementById('searchInput').value;
             currentPage = 1;
             renderCompaniesTable();
         }
 
         // Фильтрация по сектору
-        function filterBySector(sector) {
-            currentFilter = sector;
+        function filterBySector() {
+            currentFilter = document.getElementById('sectorFilter').value;
             currentPage = 1;
-            
-            // Обновление активных кнопок фильтров
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
             renderCompaniesTable();
         }
 
-        // Показать все компании
-        function showAllCompanies() {
-            currentFilter = 'all';
-            currentSearch = '';
-            currentPage = 1;
-            document.getElementById('tableSearch').value = '';
-            
-            // Обновление активных кнопок фильтров
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelectorAll('.filter-btn')[0].classList.add('active');
-            
-            renderCompaniesTable();
-        }
-
-        // Показать уведомление
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
-
-        // Данные для плашек с бегунками
-        const inputGroupsData = {
-            base: {
-                title: "Базовые показатели",
-                icon: "📊",
-                inputs: [
-                    { 
-                        id: "investmentAmount", 
-                        label: "Объём инвестиций", 
-                        suffix: "₽", 
-                        type: "amount", 
-                        min: 50000000, 
-                        max: 1000000000, 
-                        step: 5000000,
-                        value: 250000000,
-                        required: true 
-                    },
-                    { 
-                        id: "investmentPeriod", 
-                        label: "Срок инвестиций", 
-                        suffix: "мес.", 
-                        type: "slider", 
-                        min: 6, 
-                        max: 84, 
-                        step: 1,
-                        value: 30,
-                        required: true 
-                    },
-                    { 
-                        id: "historicalRoi", 
-                        label: "Исторический ROI", 
-                        suffix: "%", 
-                        type: "slider", 
-                        min: 5, 
-                        max: 50, 
-                        step: 0.5,
-                        value: 15.0,
-                        required: true 
-                    },
-                    { 
-                        id: "riskTolerance", 
-                        label: "Допустимый риск", 
-                        suffix: "%", 
-                        type: "slider", 
-                        min: 5, 
-                        max: 50, 
-                        step: 1,
-                        value: 15,
-                        required: true 
-                    }
-                ]
-            },
-            rd: {
-                title: "R&D проекты",
-                icon: "🔬",
-                inputs: [
-                    { 
-                        id: "rdBudget", 
-                        label: "Бюджет R&D (% от инвест.)", 
-                        suffix: "%", 
-                        type: "slider", 
-                        min: 5, 
-                        max: 50, 
-                        step: 1,
-                        value: 20,
-                        required: true 
-                    },
-                    { 
-                        id: "projectCount", 
-                        label: "Кол-во активных R&D проектов", 
-                        suffix: "шт.", 
-                        type: "slider", 
-                        min: 1, 
-                        max: 100, 
-                        step: 1,
-                        value: 10 
-                    },
-                    { 
-                        id: "currentRdSuccess", 
-                        label: "Доля окупающихся проектов", 
-                        suffix: "%", 
-                        type: "slider", 
-                        min: 10, 
-                        max: 100, 
-                        step: 1,
-                        value: 40 
-                    },
-                    { 
-                        id: "currentPaybackPeriod", 
-                        label: "Средний срок окупаемости", 
-                        suffix: "мес.", 
-                        type: "slider", 
-                        min: 6, 
-                        max: 84, 
-                        step: 1,
-                        value: 24 
-                    }
-                ]
-            },
-            customer: {
-                title: "Клиентская база",
-                icon: "👥",
-                inputs: [
-                    { 
-                        id: "customerCount", 
-                        label: "Кол-во корпоративных клиентов", 
-                        suffix: "компаний", 
-                        type: "slider", 
-                        min: 10, 
-                        max: 1000, 
-                        step: 5,
-                        value: 100 
-                    },
-                    { 
-                        id: "currentChurn", 
-                        label: "Отток клиентов (Churn Rate)", 
-                        suffix: "%", 
-                        type: "slider", 
-                        min: 1, 
-                        max: 50, 
-                        step: 0.5,
-                        value: 15.0 
-                    },
-                    { 
-                        id: "avgLtv", 
-                        label: "Средний годовой LTV клиента", 
-                        suffix: "₽", 
-                        type: "amount", 
-                        min: 100000, 
-                        max: 10000000, 
-                        step: 50000,
-                        value: 850000 
-                    },
-                    { 
-                        id: "keyCustomersShare", 
-                        label: "Доля ключевых (TOP 20%) клиентов", 
-                        suffix: "%", 
-                        type: "slider", 
-                        min: 20, 
-                        max: 100, 
-                        step: 1,
-                        value: 40 
-                    }
-                ]
-            },
-            infrastructure: {
-                title: "Инфраструктура",
-                icon: "🏗️",
-                inputs: [
-                    { 
-                        id: "infraCapex", 
-                        label: "Годовой CAPEX на инфраструктуру", 
-                        suffix: "₽", 
-                        type: "amount", 
-                        min: 5000000, 
-                        max: 200000000, 
-                        step: 1000000,
-                        value: 25000000 
-                    },
-                    { 
-                        id: "unplannedDowntime", 
-                        label: "Уровень незапланированных простоев", 
-                        suffix: "%", 
-                        type: "slider", 
-                        min: 0, 
-                        max: 25, 
-                        step: 0.5,
-                        value: 8.0 
-                    },
-                    { 
-                        id: "maintenanceCost", 
-                        label: "Затраты на техническую поддержку", 
-                        suffix: "₽", 
-                        type: "amount", 
-                        min: 1000000, 
-                        max: 100000000, 
-                        step: 500000,
-                        value: 12000000 
-                    }
-                ]
-            }
-        };
-
-        // Создание перемещаемых плашек с бегунками
-        function createInputCards() {
-            const container = document.getElementById('inputGroupsContainer');
-            container.innerHTML = '';
-            
-            cardOrder.forEach(groupKey => {
-                const group = inputGroupsData[groupKey];
-                if (!group) return;
-                
-                const card = document.createElement('div');
-                card.className = 'input-group-card';
-                card.dataset.group = groupKey;
-                card.draggable = true;
-                
-                let inputsHTML = '';
-                group.inputs.forEach(input => {
-                    const requiredMark = input.required ? '<span class="required-mark">*</span>' : '';
-                    
-                    if (input.type === 'slider' || input.type === 'amount') {
-                        inputsHTML += `
-                            <div class="input-row">
-                                <div class="slider-label">
-                                    <span class="slider-label-text">${input.label}${requiredMark}:</span>
-                                    <span class="slider-value" id="${input.id}Value">${formatSliderValue(input.value, input.id)}</span>
-                                </div>
-                                <div class="slider-container">
-                                    <input type="range" 
-                                           id="${input.id}" 
-                                           min="${input.min}" 
-                                           max="${input.max}" 
-                                           step="${input.step}"
-                                           value="${input.value}"
-                                           oninput="updateSliderValue('${input.id}', this.value)">
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-                
-                card.innerHTML = `
-                    <div class="card-header">
-                        <div class="card-title">
-                            <span class="category-icon">${group.icon}</span>
-                            ${group.title}
-                        </div>
-                        <div class="drag-handle">⋮⋮</div>
-                    </div>
-                    ${inputsHTML}
-                `;
-                
-                container.appendChild(card);
-                
-                // Добавляем обработчики перетаскивания
-                addDragAndDropHandlers(card);
-            });
-        }
-
-        // Форматирование значения для отображения
-        function formatSliderValue(value, id) {
-            const numValue = parseFloat(value);
-            if (isNaN(numValue)) return '—';
-            
-            if (id.includes('Amount') || id.includes('Cost') || id.includes('Capex') || id === 'avgLtv') {
-                return formatNumber(numValue);
-            } else if (id.includes('Roi') || id.includes('Churn') || id.includes('Success') || id.includes('Share') || 
-                      id.includes('Downtime') || id.includes('Tolerance') || id.includes('Budget')) {
-                return numValue.toFixed(id.includes('Roi') || id.includes('Churn') ? 1 : 0) + '%';
-            } else if (id.includes('Period')) {
-                return numValue + ' мес.';
-            } else if (id.includes('Count')) {
-                return numValue + ' шт.';
-            }
-            return numValue;
-        }
-
-        // Обновление значения бегунка
-        function updateSliderValue(id, value) {
-            const valueElement = document.getElementById(id + 'Value');
-            const slider = document.getElementById(id);
-            
-            // Обновляем отображаемое значение
-            valueElement.textContent = formatSliderValue(value, id);
-            
-            // Проверяем, изменилось ли значение
-            const originalValue = originalValues[id];
-            if (originalValue && parseFloat(value) !== parseFloat(originalValue)) {
-                slider.classList.add('slider-changed');
-            } else {
-                slider.classList.remove('slider-changed');
-            }
-            
-            // Активируем кнопку расчета
-            checkRequiredFields();
-        }
-
-        // Проверка обязательных полей
-        function checkRequiredFields() {
-            let allFilled = true;
-            
-            // Проверяем все обязательные поля
-            Object.values(inputGroupsData).forEach(group => {
-                group.inputs.forEach(input => {
-                    if (input.required) {
-                        const element = document.getElementById(input.id);
-                        if (!element || !element.value) {
-                            allFilled = false;
-                        }
-                    }
-                });
-            });
-            
-            document.getElementById('calculateBtn').disabled = !allFilled;
-            return allFilled;
-        }
-
-        // Добавление обработчиков перетаскивания
-        function addDragAndDropHandlers(card) {
-            card.addEventListener('dragstart', handleDragStart);
-            card.addEventListener('dragover', handleDragOver);
-            card.addEventListener('dragenter', handleDragEnter);
-            card.addEventListener('dragleave', handleDragLeave);
-            card.addEventListener('drop', handleDrop);
-            card.addEventListener('dragend', handleDragEnd);
-            
-            // Обработчик для drag handle
-            const dragHandle = card.querySelector('.drag-handle');
-            dragHandle.addEventListener('mousedown', (e) => {
-                card.draggable = true;
-                card.style.cursor = 'grabbing';
-            });
-            
-            dragHandle.addEventListener('mouseup', (e) => {
-                card.style.cursor = 'grab';
-            });
-        }
-
-        // Обработчики drag and drop
-        function handleDragStart(e) {
-            draggedCard = this;
-            this.classList.add('dragging');
-            e.dataTransfer.effectAllowed = 'move';
-            e.dataTransfer.setData('text/html', this.innerHTML);
-        }
-
-        function handleDragOver(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
-            return false;
-        }
-
-        function handleDragEnter(e) {
-            this.classList.add('over');
-        }
-
-        function handleDragLeave(e) {
-            this.classList.remove('over');
-        }
-
-        function handleDrop(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            
-            if (draggedCard !== this) {
-                const container = document.getElementById('inputGroupsContainer');
-                const cards = Array.from(container.querySelectorAll('.input-group-card'));
-                const draggedIndex = cards.indexOf(draggedCard);
-                const dropIndex = cards.indexOf(this);
-                
-                // Сохраняем текущие значения
-                const currentValues = {};
-                Object.keys(inputGroupsData).forEach(groupKey => {
-                    inputGroupsData[groupKey].inputs.forEach(input => {
-                        const element = document.getElementById(input.id);
-                        if (element) {
-                            currentValues[input.id] = element.value;
-                        }
-                    });
-                });
-                
-                // Обновляем порядок в массиве
-                const draggedGroup = cardOrder[draggedIndex];
-                cardOrder.splice(draggedIndex, 1);
-                cardOrder.splice(dropIndex, 0, draggedGroup);
-                
-                // Перерисовываем плашки
-                createInputCards();
-                
-                // Восстанавливаем значения
-                Object.keys(currentValues).forEach(id => {
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.value = currentValues[id];
-                        updateSliderValue(id, currentValues[id]);
-                    }
-                });
-                
-                showNotification('Порядок плашек изменен', 'success');
-            }
-            
-            return false;
-        }
-
-        function handleDragEnd(e) {
-            document.querySelectorAll('.input-group-card').forEach(card => {
-                card.classList.remove('dragging');
-                card.classList.remove('over');
-            });
-            draggedCard = null;
-        }
-
-        // Поиск компании по ИНН
-        function searchByINN() {
-            const innInput = document.getElementById('innInput').value.trim();
-            
-            if (!innInput) {
-                showNotification('Введите ИНН компании', 'error');
-                return;
-            }
-            
-            // Проверяем, есть ли компания с таким ИНН
-            const company = companiesDatabase[innInput];
-            
-            if (company) {
-                loadCompany(company.id, innInput);
-            } else {
-                showNotification(`Компания с ИНН ${innInput} не найдена в базе. В базе ${Object.keys(companiesDatabase).length} компаний.`, 'error');
-            }
-        }
-
-        // Загрузка данных компании
-        function loadCompany(companyId, inn) {
-            // Находим компанию в базе данных
+        // Показать детали компании
+        function showCompanyDetails(inn) {
             const company = companiesDatabase[inn];
+            if (!company) return;
             
-            if (!company) {
-                showNotification('Компания не найдена', 'error');
-                return;
-            }
+            const message = `
+Компания: ${company.name}
+ИНН: ${inn}
+Сектор: ${company.sector}
+Описание: ${company.description}
+
+Финансовые показатели:
+• ROI: ${company.historicalRoi.toFixed(1)}%
+• Инвестиции: ${formatNumber(company.investmentAmount)}
+• Бюджет R&D: ${company.rdBudget}%
+• Активные проекты: ${company.projectCount}
+• Клиенты: ${company.customerCount.toLocaleString()}
+• Отток клиентов: ${company.currentChurn.toFixed(1)}%
+• Средний LTV: ${formatNumber(company.avgLtv)}
+• CAPEX инфраструктура: ${formatNumber(company.infraCapex)}
+            `;
             
-            // Устанавливаем текущую компанию
-            currentCompanyId = companyId;
-            
-            // Заполняем данные компании
-            document.getElementById('companyName').textContent = company.name;
-            document.getElementById('companyDetails').textContent = company.details;
-            document.getElementById('companyLogo').textContent = company.logo;
-            document.getElementById('companyLogo').style.background = `linear-gradient(135deg, ${company.color} 0%, ${company.color}99 100%)`;
-            
-            // Обновляем статистику
-            document.querySelectorAll('.stat-item')[0].querySelector('.stat-value').textContent = company.sector;
-            
-            // Создаем плашки, если еще не созданы
-            if (document.getElementById('inputGroupsContainer').children.length === 0) {
-                createInputCards();
-            }
-            
-            // Заполняем бегунки значениями компании
-            Object.keys(inputGroupsData).forEach(groupKey => {
-                inputGroupsData[groupKey].inputs.forEach(input => {
-                    const element = document.getElementById(input.id);
-                    if (element) {
-                        let value;
-                        
-                        switch(input.id) {
-                            case 'investmentAmount':
-                                value = company.investmentAmount;
-                                break;
-                            case 'investmentPeriod':
-                                value = company.investmentPeriod;
-                                break;
-                            case 'historicalRoi':
-                                value = company.historicalRoi;
-                                break;
-                            case 'riskTolerance':
-                                value = company.riskTolerance;
-                                break;
-                            case 'rdBudget':
-                                value = company.rdBudget;
-                                break;
-                            case 'projectCount':
-                                value = company.projectCount;
-                                break;
-                            case 'currentRdSuccess':
-                                value = company.currentRdSuccess;
-                                break;
-                            case 'currentPaybackPeriod':
-                                value = company.currentPaybackPeriod;
-                                break;
-                            case 'customerCount':
-                                value = company.customerCount;
-                                break;
-                            case 'currentChurn':
-                                value = company.currentChurn;
-                                break;
-                            case 'avgLtv':
-                                value = company.avgLtv;
-                                break;
-                            case 'keyCustomersShare':
-                                value = company.keyCustomersShare;
-                                break;
-                            case 'infraCapex':
-                                value = company.infraCapex;
-                                break;
-                            case 'unplannedDowntime':
-                                value = company.unplannedDowntime;
-                                break;
-                            case 'maintenanceCost':
-                                value = company.maintenanceCost;
-                                break;
-                            default:
-                                value = input.value;
-                        }
-                        
-                        element.value = value;
-                        updateSliderValue(input.id, value);
-                    }
-                });
-            });
-            
-            // Сохраняем исходные значения для сравнения
-            saveOriginalValues();
-            
-            // Активируем кнопку расчета
-            checkRequiredFields();
-            
-            // Показываем результаты
-            document.getElementById('resultsContainer').classList.remove('hidden');
-            
-            showNotification(`Данные компании "${company.name}" загружены`, 'success');
+            alert(message);
         }
 
-        // Сохранить оригинальные значения
-        function saveOriginalValues() {
-            Object.keys(inputGroupsData).forEach(groupKey => {
-                inputGroupsData[groupKey].inputs.forEach(input => {
-                    const element = document.getElementById(input.id);
-                    if (element) {
-                        originalValues[input.id] = element.value;
-                    }
-                });
-            });
-        }
-
-        // Поиск случайной компании
-        function searchRandomCompany() {
-            const inns = Object.keys(companiesDatabase);
-            if (inns.length === 0) {
-                showNotification('База данных пуста', 'error');
-                return;
-            }
-            
-            const randomINN = inns[Math.floor(Math.random() * inns.length)];
-            document.getElementById('innInput').value = randomINN;
-            searchByINN();
-        }
-
-        // Добавить новую компанию
-        function addNewCompany() {
-            // Генерация случайной компании
+        // Добавить случайную компанию
+        function addRandomCompany() {
             const sector = companyDataGenerator.sectors[Math.floor(Math.random() * companyDataGenerator.sectors.length)];
-            const inn = companyDataGenerator.generateINN();
+            let inn;
+            
+            // Генерация уникального ИНН
+            do {
+                inn = companyDataGenerator.generateINN();
+            } while (companiesDatabase[inn]);
+            
             const name = companyDataGenerator.generateCompanyName();
             const description = companyDataGenerator.generateDescription(sector);
             
@@ -2476,56 +1116,26 @@
             companiesDatabase[inn] = {
                 id: `custom_${Date.now()}`,
                 name: name,
-                details: description,
+                description: description,
                 sector: sector,
                 logo: name.charAt(0),
-                color: getSectorColor(sector),
-                
-                // Базовые показатели
-                investmentAmount: String(metrics.investmentAmount),
-                investmentPeriod: String(metrics.investmentPeriod),
-                historicalRoi: String(metrics.historicalRoi),
-                riskTolerance: String(metrics.riskTolerance),
-                
-                // R&D проекты
-                rdBudget: String(metrics.rdBudget),
-                projectCount: String(metrics.projectCount),
-                currentRdSuccess: String(metrics.currentRdSuccess),
-                currentPaybackPeriod: String(metrics.currentPaybackPeriod),
-                
-                // Клиентская база
-                customerCount: String(metrics.customerCount),
-                currentChurn: String(metrics.currentChurn),
-                avgLtv: String(metrics.avgLtv),
-                keyCustomersShare: String(metrics.keyCustomersShare),
-                
-                // Инфраструктура
-                infraCapex: String(metrics.infraCapex),
-                unplannedDowntime: String(metrics.unplannedDowntime),
-                maintenanceCost: String(metrics.maintenanceCost),
-                
-                // Исторические данные
-                historicalData: {
-                    portfolioRoi: String(metrics.historicalRoi),
-                    ineffectiveInvestments: String(metrics.ineffectiveInvestments),
-                    customerRetention: String(100 - parseFloat(metrics.currentChurn)),
-                    rdEfficiency: String(metrics.currentRdSuccess),
-                    paybackPeriod: String(metrics.currentPaybackPeriod),
-                    churnRate: String(metrics.currentChurn)
-                }
+                investmentAmount: metrics.investmentAmount,
+                historicalRoi: metrics.historicalRoi,
+                rdBudget: metrics.rdBudget,
+                projectCount: metrics.projectCount,
+                customerCount: metrics.customerCount,
+                currentChurn: metrics.currentChurn,
+                avgLtv: metrics.avgLtv,
+                infraCapex: metrics.infraCapex
             };
             
             // Обновление таблицы
             renderCompaniesTable();
             
-            // Автоматическая загрузка добавленной компании
-            document.getElementById('innInput').value = inn;
-            searchByINN();
-            
             showNotification(`Компания "${name}" успешно добавлена в базу данных`, 'success');
         }
 
-        // Загрузка шаблона CSV
+        // Загрузка шаблонных компаний
         function loadTemplateCompanies() {
             const templateCompanies = [
                 {
@@ -2562,418 +1172,171 @@
                     companiesDatabase[company.inn] = {
                         id: `template_${Date.now()}_${addedCount}`,
                         name: company.name,
-                        details: company.desc,
+                        description: company.desc,
                         sector: company.sector,
                         logo: company.name.charAt(0),
-                        color: getSectorColor(company.sector),
-                        
-                        // Базовые показатели
-                        investmentAmount: String(metrics.investmentAmount),
-                        investmentPeriod: String(metrics.investmentPeriod),
-                        historicalRoi: String(metrics.historicalRoi),
-                        riskTolerance: String(metrics.riskTolerance),
-                        
-                        // R&D проекты
-                        rdBudget: String(metrics.rdBudget),
-                        projectCount: String(metrics.projectCount),
-                        currentRdSuccess: String(metrics.currentRdSuccess),
-                        currentPaybackPeriod: String(metrics.currentPaybackPeriod),
-                        
-                        // Клиентская база
-                        customerCount: String(metrics.customerCount),
-                        currentChurn: String(metrics.currentChurn),
-                        avgLtv: String(metrics.avgLtv),
-                        keyCustomersShare: String(metrics.keyCustomersShare),
-                        
-                        // Инфраструктура
-                        infraCapex: String(metrics.infraCapex),
-                        unplannedDowntime: String(metrics.unplannedDowntime),
-                        maintenanceCost: String(metrics.maintenanceCost),
-                        
-                        // Исторические данные
-                        historicalData: {
-                            portfolioRoi: String(metrics.historicalRoi),
-                            ineffectiveInvestments: String(metrics.ineffectiveInvestments),
-                            customerRetention: String(100 - parseFloat(metrics.currentChurn)),
-                            rdEfficiency: String(metrics.currentRdSuccess),
-                            paybackPeriod: String(metrics.currentPaybackPeriod),
-                            churnRate: String(metrics.currentChurn)
-                        }
+                        investmentAmount: metrics.investmentAmount,
+                        historicalRoi: metrics.historicalRoi,
+                        rdBudget: metrics.rdBudget,
+                        projectCount: metrics.projectCount,
+                        customerCount: metrics.customerCount,
+                        currentChurn: metrics.currentChurn,
+                        avgLtv: metrics.avgLtv,
+                        infraCapex: metrics.infraCapex
                     };
                     addedCount++;
                 }
             });
             
             renderCompaniesTable();
-            showNotification(`Добавлено ${addedCount} новых компаний по шаблону. Всего в базе: ${Object.keys(companiesDatabase).length} компаний`, 'success');
+            showNotification(`Добавлено ${addedCount} новых компаний. Всего в базе: ${Object.keys(companiesDatabase).length} компаний`, 'success');
         }
 
-        // Расчет результатов
-        function calculateResults() {
-            // Получаем значения из бегунков
-            const investmentAmount = parseFloat(document.getElementById('investmentAmount').value) || 280000000;
-            const investmentPeriod = parseFloat(document.getElementById('investmentPeriod').value) || 36;
-            const historicalRoi = parseFloat(document.getElementById('historicalRoi').value) || 15.0;
-            const riskTolerance = parseFloat(document.getElementById('riskTolerance').value) || 22;
-            const rdBudget = parseFloat(document.getElementById('rdBudget').value) || 28;
-            const projectCount = parseFloat(document.getElementById('projectCount').value) || 45;
-            const currentRdSuccess = parseFloat(document.getElementById('currentRdSuccess').value) || 40;
-            const currentPaybackPeriod = parseFloat(document.getElementById('currentPaybackPeriod').value) || 24;
-            const customerCount = parseFloat(document.getElementById('customerCount').value) || 500;
-            const currentChurn = parseFloat(document.getElementById('currentChurn').value) || 10.0;
-            const avgLtv = parseFloat(document.getElementById('avgLtv').value) || 1050000;
-            const keyCustomersShare = parseFloat(document.getElementById('keyCustomersShare').value) || 48;
-            const infraCapex = parseFloat(document.getElementById('infraCapex').value) || 35000000;
-            const unplannedDowntime = parseFloat(document.getElementById('unplannedDowntime').value) || 8.2;
-            const maintenanceCost = parseFloat(document.getElementById('maintenanceCost').value) || 18000000;
+        // Экспорт в CSV
+        function exportToCSV() {
+            const headers = ['ИНН', 'Название', 'Сектор', 'ROI (%)', 'Инвестиции (руб)', 'Клиенты', 'Бюджет R&D (%)', 'Проекты', 'Отток (%)', 'LTV (руб)', 'CAPEX (руб)'];
             
-            // Получаем исторические данные компании
-            let company = null;
-            if (currentCompanyId) {
-                const innInput = document.getElementById('innInput').value.trim();
-                company = companiesDatabase[innInput];
-            }
+            let csvContent = headers.join(';') + '\n';
             
-            const historicalData = company ? company.historicalData : {
-                portfolioRoi: historicalRoi.toFixed(1),
-                ineffectiveInvestments: "25.0",
-                customerRetention: (100 - currentChurn).toFixed(1),
-                rdEfficiency: currentRdSuccess.toFixed(0),
-                paybackPeriod: currentPaybackPeriod.toFixed(0),
-                churnRate: currentChurn.toFixed(1)
-            };
+            Object.entries(companiesDatabase).forEach(([inn, company]) => {
+                const row = [
+                    inn,
+                    `"${company.name}"`,
+                    company.sector,
+                    company.historicalRoi.toFixed(1),
+                    company.investmentAmount,
+                    company.customerCount,
+                    company.rdBudget,
+                    company.projectCount,
+                    company.currentChurn.toFixed(1),
+                    company.avgLtv,
+                    company.infraCapex
+                ];
+                csvContent += row.join(';') + '\n';
+            });
             
-            // Для МПИТ используем реальные данные из ВКР
-            let aiImprovements;
-            if (company && company.id === "mobit") {
-                aiImprovements = {
-                    roi: 21.0,
-                    churnReduction: 7.0,
-                    rdEfficiency: 65,
-                    paybackImprovement: 19,
-                    segmentHigh: Math.round(customerCount * 0.15),
-                    ltvGrowth: Math.round(avgLtv * 1.32),
-                    downtimeReduction: parseFloat((unplannedDowntime * 0.6).toFixed(1)),
-                    capexSavings: Math.round(infraCapex * 0.15),
-                    maintenanceSavings: Math.round(maintenanceCost * 0.22),
-                    portfolioRoiWithAI: 21.0,
-                    ineffectiveInvestmentsAI: 17.0,
-                    paybackPeriodAI: 19,
-                    churnRateAI: 7.0
-                };
-            } else {
-                // Для других компаний используем расчетные значения
-                aiImprovements = {
-                    roi: Math.min(35, parseFloat((historicalRoi + 6.5).toFixed(1))),
-                    churnReduction: parseFloat(Math.max(3, currentChurn * 0.6).toFixed(1)),
-                    rdEfficiency: Math.min(80, parseFloat((currentRdSuccess + 25).toFixed(0))),
-                    paybackImprovement: parseFloat(Math.max(10, currentPaybackPeriod * 0.65).toFixed(1)),
-                    segmentHigh: Math.round(customerCount * 0.15),
-                    ltvGrowth: Math.round(avgLtv * 1.32),
-                    downtimeReduction: parseFloat(Math.max(1, unplannedDowntime * 0.6).toFixed(1)),
-                    capexSavings: Math.round(infraCapex * 0.15),
-                    maintenanceSavings: Math.round(maintenanceCost * 0.22),
-                    portfolioRoiWithAI: parseFloat((parseFloat(historicalData.portfolioRoi) + 6.0).toFixed(1)),
-                    ineffectiveInvestmentsAI: Math.max(8, parseFloat((parseFloat(historicalData.ineffectiveInvestments) * 0.6).toFixed(1))),
-                    paybackPeriodAI: parseFloat((parseFloat(historicalData.paybackPeriod) * 0.7).toFixed(1)),
-                    churnRateAI: parseFloat((parseFloat(historicalData.churnRate) * 0.6).toFixed(1))
-                };
-            }
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
             
-            // Сохраняем данные для пересчета
-            currentAnalysisData = {
-                investmentAmount,
-                investmentPeriod,
-                historicalRoi,
-                riskTolerance,
-                rdBudget,
-                projectCount,
-                currentRdSuccess,
-                currentPaybackPeriod,
-                customerCount,
-                currentChurn,
-                avgLtv,
-                keyCustomersShare,
-                infraCapex,
-                unplannedDowntime,
-                maintenanceCost,
-                historicalData,
-                aiImprovements,
-                company: company
-            };
+            link.setAttribute('href', url);
+            link.setAttribute('download', `база_компаний_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
             
-            // Генерируем отчет
-            generateReport(aiImprovements, historicalRoi, currentChurn, currentPaybackPeriod, historicalData, investmentAmount, unplannedDowntime, company);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
             
-            // Показываем кнопку пересчета
-            document.getElementById('calculateBtn').style.display = 'none';
-            document.getElementById('recalculateBtn').style.display = 'block';
-            
-            // Активируем кнопки экспорта
-            document.getElementById('exportPdfBtn').disabled = false;
-            document.getElementById('exportExcelBtn').disabled = false;
-            
-            showNotification('Анализ завершен. Получены рекомендации по внедрению ИИ', 'success');
+            showNotification(`Экспортировано ${Object.keys(companiesDatabase).length} компаний в CSV`, 'info');
+        }
+
+        // Экспорт в Excel
+        function exportToExcel() {
+            showNotification('Экспорт в Excel будет доступен в следующей версии', 'info');
         }
 
         // Генерация отчета
-        function generateReport(aiImprovements, historicalRoi, currentChurn, currentPaybackPeriod, historicalData, investmentAmount, unplannedDowntime, company) {
-            const resultsContainer = document.getElementById('resultsContainer');
+        function generateReport() {
+            // Статистика по секторам
+            const sectorStats = {};
+            let totalInvestment = 0;
+            let totalRoi = 0;
+            let totalCustomers = 0;
             
-            // Рассчитываем процент улучшения окупаемости
-            const paybackImprovementPercent = Math.round((1 - aiImprovements.paybackImprovement/currentPaybackPeriod) * 100);
-            
-            // Информация о компании
-            const companyInfo = company ? `
-                <div class="company-info" style="background: linear-gradient(135deg, ${company.color}15 0%, ${company.color}05 100%); padding: 20px; border-radius: 10px; margin-bottom: 25px; border: 1px solid ${company.color}30;">
-                    <div style="display: flex; align-items: center; gap: 15px;">
-                        <div style="width: 50px; height: 50px; background: linear-gradient(135deg, ${company.color} 0%, ${company.color}99 100%); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">${company.logo}</div>
-                        <div>
-                            <h3 style="color: ${company.color}; margin-bottom: 5px;">${company.name}</h3>
-                            <p style="color: #666; font-size: 0.95rem;">${company.details}</p>
-                            <div style="display: inline-block; background: ${company.color}20; color: ${company.color}; padding: 4px 12px; border-radius: 12px; font-size: 0.85rem; font-weight: 500; margin-top: 8px;">Сектор: ${company.sector}</div>
-                        </div>
-                    </div>
-                </div>
-            ` : '';
-            
-            const reportHTML = `
-                ${companyInfo}
+            Object.values(companiesDatabase).forEach(company => {
+                if (!sectorStats[company.sector]) {
+                    sectorStats[company.sector] = {
+                        count: 0,
+                        totalInvestment: 0,
+                        avgRoi: 0,
+                        totalCustomers: 0
+                    };
+                }
                 
-                <div class="metric-cards">
-                    <div class="metric-card">
-                        <div class="metric-title">Прогноз ROI с ИИ</div>
-                        <div class="metric-value">${aiImprovements.roi.toFixed(1)}%</div>
-                        <div class="metric-subtitle">Целевой: 22% | Без ИИ: ${historicalRoi.toFixed(1)}%</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Прогноз оттока клиентов</div>
-                        <div class="metric-value">${aiImprovements.churnReduction}%</div>
-                        <div class="metric-subtitle">Целевой: <6% | Без ИИ: ${currentChurn.toFixed(1)}%</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-title">Эффективность R&D с ИИ</div>
-                        <div class="metric-value">${aiImprovements.rdEfficiency.toFixed(0)}%</div>
-                        <div class="metric-subtitle">Проекты окупаются за ${aiImprovements.paybackImprovement} мес.</div>
-                    </div>
-                </div>
+                sectorStats[company.sector].count++;
+                sectorStats[company.sector].totalInvestment += company.investmentAmount;
+                sectorStats[company.sector].avgRoi += company.historicalRoi;
+                sectorStats[company.sector].totalCustomers += company.customerCount;
                 
-                <div class="algorithm-results">
-                    <h2 class="section-title">Аналитические модели ИИ</h2>
-                    
-                    <div class="algorithm-card">
-                        <div class="algorithm-header">
-                            <div class="algorithm-name">Прогнозирование LTV клиентов (LightGBM)</div>
-                            <div class="algorithm-accuracy">Точность: 89%</div>
-                        </div>
-                        <div class="algorithm-details">
-                            <div class="detail-item">
-                                <span>Сегмент "Высокопотенциальный":</span>
-                                <strong>${aiImprovements.segmentHigh} компаний</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Прогноз роста LTV:</span>
-                                <strong>${formatNumber(aiImprovements.ltvGrowth)} ₽</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Рек. инвестиции в удержание:</span>
-                                <strong>${formatNumber(Math.round(investmentAmount * 0.08))} ₽</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Ожидаемый эффект на доходность:</span>
-                                <strong>+18% к доходности</strong>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="algorithm-card">
-                        <div class="algorithm-header">
-                            <div class="algorithm-name">Оптимизация R&D портфеля (Q-learning)</div>
-                            <div class="algorithm-accuracy">Точность: 85%</div>
-                        </div>
-                        <div class="algorithm-details">
-                            <div class="detail-item">
-                                <span>Рек. перераспределение бюджета:</span>
-                                <strong>Долгосрочные: ${Math.round(currentAnalysisData.rdBudget * 0.2)}% → Быстрые: ${Math.round(currentAnalysisData.rdBudget * 0.6)}%</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Проекты с окупаемостью ≤12 мес.:</span>
-                                <strong>${Math.round(currentAnalysisData.projectCount * 0.65)} из ${currentAnalysisData.projectCount}</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Сокращение сроков окупаемости:</span>
-                                <strong>-${(currentPaybackPeriod - aiImprovements.paybackImprovement).toFixed(1)} мес.</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Ожидаемый прирост выручки:</span>
-                                <strong>${formatNumber(Math.round(investmentAmount * (aiImprovements.roi/100) * 0.3))} ₽</strong>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="algorithm-card">
-                        <div class="algorithm-header">
-                            <div class="algorithm-name">Предиктивное обслуживание (Автокодировщики)</div>
-                            <div class="algorithm-accuracy">Точность: 94%</div>
-                        </div>
-                        <div class="algorithm-details">
-                            <div class="detail-item">
-                                <span>Снижение незапланированных простоев:</span>
-                                <strong>-${(unplannedDowntime - aiImprovements.downtimeReduction).toFixed(1)}%</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Экономия CAPEX:</span>
-                                <strong>${formatNumber(aiImprovements.capexSavings)} ₽</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>Снижение затрат на поддержку:</span>
-                                <strong>${formatNumber(aiImprovements.maintenanceSavings)} ₽</strong>
-                            </div>
-                            <div class="detail-item">
-                                <span>ROI предиктивного обслуживания:</span>
-                                <strong>142%</strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="kpi-section">
-                    <h2 class="section-title">Система сбалансированных KPI (после внедрения ИИ)</h2>
-                    <div class="kpi-grid">
-                        <div class="kpi-item">
-                            <div class="kpi-header">
-                                <span>Рентабельность инвестиционного портфеля (ROI)</span>
-                                <span class="kpi-change positive">+6.0%</span>
-                            </div>
-                            <div class="kpi-value">${aiImprovements.portfolioRoiWithAI.toFixed(1)}%</div>
-                            <div style="font-size: 0.9rem; color: #777; margin-top: 8px;">До внедрения: ${historicalData.portfolioRoi}%</div>
-                        </div>
-                        <div class="kpi-item">
-                            <div class="kpi-header">
-                                <span>Доля неэффективных инвестиций</span>
-                                <span class="kpi-change positive">-8.0%</span>
-                            </div>
-                            <div class="kpi-value">${aiImprovements.ineffectiveInvestmentsAI.toFixed(1)}%</div>
-                            <div style="font-size: 0.9rem; color: #777; margin-top: 8px;">До внедрения: ${historicalData.ineffectiveInvestments}%</div>
-                        </div>
-                        <div class="kpi-item">
-                            <div class="kpi-header">
-                                <span>Срок окупаемости R&D проектов</span>
-                                <span class="kpi-change positive">-5 мес.</span>
-                            </div>
-                            <div class="kpi-value">${aiImprovements.paybackPeriodAI} мес.</div>
-                            <div style="font-size: 0.9rem; color: #777; margin-top: 8px;">До внедрения: ${historicalData.paybackPeriod} мес.</div>
-                        </div>
-                        <div class="kpi-item">
-                            <div class="kpi-header">
-                                <span>Отток ключевых клиентов (Churn)</span>
-                                <span class="kpi-change positive">-3.0%</span>
-                            </div>
-                            <div class="kpi-value">${aiImprovements.churnRateAI.toFixed(1)}%</div>
-                            <div style="font-size: 0.9rem; color: #777; margin-top: 8px;">До внедрения: ${historicalData.churnRate}%</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="recommendations">
-                    <h2 class="section-title">Рекомендации по внедрению ИИ</h2>
-                    
-                    <div class="recommendation-card">
-                        <div class="recommendation-header">
-                            <div class="rec-title">Приоритет #1: Внедрение LightGBM для прогнозирования LTV</div>
-                            <div class="rec-impact">Точность: 89%</div>
-                        </div>
-                        <div class="rec-details">
-                            Внедрение модели градиентного бустинга позволит сегментировать клиентскую базу, увеличить средний LTV на 32% 
-                            и сократить отток ключевых клиентов на ${(currentChurn - aiImprovements.churnReduction).toFixed(1)}%.
-                            <span class="risk-indicator low-risk">Низкий риск | ROI: 142%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="recommendation-card">
-                        <div class="recommendation-header">
-                            <div class="rec-title">Приоритет #2: Оптимизация R&D портфеля с Q-learning</div>
-                            <div class="rec-impact">Точность: 85%</div>
-                        </div>
-                        <div class="rec-details">
-                            Алгоритм обучения с подкреплением перераспределит R&D бюджет, увеличив долю окупаемых проектов до ${aiImprovements.rdEfficiency.toFixed(0)}% 
-                            и сократив средние сроки окупаемости на ${paybackImprovementPercent}%.
-                            <span class="risk-indicator medium-risk">Средний риск | Срок окупаемости: ${aiImprovements.paybackImprovement} мес.</span>
-                        </div>
-                    </div>
-                    
-                    <div class="recommendation-card">
-                        <div class="recommendation-header">
-                            <div class="rec-title">Приоритет #3: Предиктивное обслуживание на автокодировщиках</div>
-                            <div class="rec-impact">Точность: 94%</div>
-                        </div>
-                        <div class="rec-details">
-                            Система обнаружения аномалий сократит незапланированные простои на ${(unplannedDowntime - aiImprovements.downtimeReduction).toFixed(1)}%, 
-                            сэкономит ${formatNumber(aiImprovements.capexSavings)} ₽ CAPEX и ${formatNumber(aiImprovements.maintenanceSavings)} ₽ на поддержке ежегодно.
-                            <span class="risk-indicator low-risk">Низкий риск | Экономический эффект: ${formatNumber(Math.round(aiImprovements.capexSavings + aiImprovements.maintenanceSavings))} ₽/год</span>
-                        </div>
-                    </div>
-                    
-                    <div class="ai-maturity">
-                        <div class="maturity-level">Уровень зрелости ИИ-внедрения</div>
-                        <div class="maturity-score">${calculateMaturityScore(aiImprovements)}/100</div>
-                        <div>Рекомендуемый бюджет на внедрение: ${formatNumber(Math.round(investmentAmount * 0.056))} ₽ (5,6% от инвестиций)</div>
-                        <div class="maturity-scale">Расчетный срок окупаемости: 6,5 месяцев | Совокупный экономический эффект: 26 млн ₽/год</div>
-                    </div>
-                </div>
-            `;
-            
-            resultsContainer.innerHTML = reportHTML;
-        }
-
-        // Пересчет результатов
-        function recalculateResults() {
-            // Сброс измененной подсветки
-            const changedSliders = document.querySelectorAll('.slider-changed');
-            changedSliders.forEach(slider => {
-                slider.classList.remove('slider-changed');
-                originalValues[slider.id] = slider.value;
+                totalInvestment += company.investmentAmount;
+                totalRoi += company.historicalRoi;
+                totalCustomers += company.customerCount;
             });
             
-            calculateResults();
+            // Расчет средних значений
+            Object.keys(sectorStats).forEach(sector => {
+                sectorStats[sector].avgRoi = sectorStats[sector].avgRoi / sectorStats[sector].count;
+            });
+            
+            const avgRoi = totalRoi / Object.keys(companiesDatabase).length;
+            
+            // Формирование отчета
+            let report = `ОТЧЕТ ПО БАЗЕ ДАННЫХ КОМПАНИЙ\n`;
+            report += `Дата генерации: ${new Date().toLocaleDateString('ru-RU')}\n`;
+            report += `========================================\n\n`;
+            report += `ОБЩАЯ СТАТИСТИКА:\n`;
+            report += `• Всего компаний: ${Object.keys(companiesDatabase).length.toLocaleString()}\n`;
+            report += `• Общий объем инвестиций: ${formatNumber(totalInvestment)}\n`;
+            report += `• Средний ROI: ${avgRoi.toFixed(1)}%\n`;
+            report += `• Общее количество клиентов: ${totalCustomers.toLocaleString()}\n\n`;
+            
+            report += `СТАТИСТИКА ПО СЕКТОРАМ:\n`;
+            Object.entries(sectorStats).forEach(([sector, stats]) => {
+                const investmentShare = (stats.totalInvestment / totalInvestment * 100).toFixed(1);
+                report += `\n${sector}:\n`;
+                report += `  • Компаний: ${stats.count} (${((stats.count / Object.keys(companiesDatabase).length) * 100).toFixed(1)}%)\n`;
+                report += `  • Инвестиции: ${formatNumber(stats.totalInvestment)} (${investmentShare}%)\n`;
+                report += `  • Средний ROI: ${stats.avgRoi.toFixed(1)}%\n`;
+                report += `  • Клиенты: ${stats.totalCustomers.toLocaleString()}\n`;
+            });
+            
+            report += `\n========================================\n`;
+            report += `ТОП-10 КОМПАНИЙ ПО ROI:\n\n`;
+            
+            // Сортировка по ROI
+            const sortedByRoi = Object.entries(companiesDatabase)
+                .map(([inn, company]) => ({ inn, ...company }))
+                .sort((a, b) => b.historicalRoi - a.historicalRoi)
+                .slice(0, 10);
+            
+            sortedByRoi.forEach((company, index) => {
+                report += `${index + 1}. ${company.name} (${company.sector})\n`;
+                report += `   ИНН: ${company.inn}\n`;
+                report += `   ROI: ${company.historicalRoi.toFixed(1)}%\n`;
+                report += `   Инвестиции: ${formatNumber(company.investmentAmount)}\n`;
+                report += `   Клиенты: ${company.customerCount.toLocaleString()}\n\n`;
+            });
+            
+            // Показать отчет
+            alert(report);
+            
+            // Опционально: скачать отчет как текстовый файл
+            const blob = new Blob([report], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `отчет_базы_компаний_${new Date().toISOString().split('T')[0]}.txt`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('Отчет сгенерирован и скачан', 'success');
         }
 
-        // Расчет зрелости
-        function calculateMaturityScore(aiImprovements) {
-            const baseScore = 40;
-            const roiScore = Math.min(20, (aiImprovements.roi - 15) * 2);
-            const churnScore = Math.min(15, (15 - aiImprovements.churnReduction) * 2);
-            const rdScore = Math.min(25, (aiImprovements.rdEfficiency - 30));
-            
-            return Math.min(100, Math.round(baseScore + roiScore + churnScore + rdScore));
-        }
-
-        // Экспорт PDF
-        function exportPDF() {
-            if (!currentAnalysisData) {
-                showNotification('Сначала выполните расчет', 'error');
-                return;
-            }
-            
-            showNotification('Генерация PDF отчета...', 'success');
+        // Показать уведомление
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
             
             setTimeout(() => {
-                showNotification('PDF отчет успешно сгенерирован и сохранен', 'success');
-            }, 1500);
-        }
-
-        // Экспорт Excel
-        function exportExcel() {
-            if (!currentAnalysisData) {
-                showNotification('Сначала выполните расчет', 'error');
-                return;
-            }
-            
-            showNotification('Генерация Excel файла...', 'success');
-            
-            setTimeout(() => {
-                showNotification('Excel файл успешно сгенерирован и сохранен', 'success');
-            }, 1500);
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
         // Инициализация
@@ -2981,13 +1344,10 @@
             // Инициализация базы данных
             initializeDatabase();
             
-            // Создаем плашки при загрузке
-            createInputCards();
-            
-            // Добавляем обработчик Enter на поле ИНН
-            document.getElementById('innInput').addEventListener('keypress', function(e) {
+            // Добавляем обработчик Enter для поиска
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    searchByINN();
+                    searchCompanies();
                 }
             });
         });
