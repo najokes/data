@@ -41,7 +41,7 @@
         .header-actions {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin: 20px 0;
             flex-wrap: wrap;
         }
@@ -59,6 +59,7 @@
             align-items: center;
             gap: 8px;
             font-weight: 500;
+            text-decoration: none;
         }
         
         .header-btn:hover {
@@ -74,6 +75,16 @@
         
         .header-btn.primary:hover {
             background: #b71c1c;
+        }
+        
+        .header-btn.analysis {
+            background: #1a237e;
+            color: white;
+            border: none;
+        }
+        
+        .header-btn.analysis:hover {
+            background: #283593;
         }
         
         .filters {
@@ -232,6 +243,11 @@
                 <button class="header-btn" onclick="exportToCSV()">
                     📥 Экспорт в CSV
                 </button>
+                <a href="https://najokes.github.io/investment-ai-dashboard/" 
+                   class="header-btn analysis" 
+                   target="_blank">
+                    📊 Перейти в анализ (3-контурная система)
+                </a>
             </div>
         </header>
         
@@ -250,7 +266,7 @@
                     <option value="Ритейл">Ритейл</option>
                     <option value="Производство">Производство</option>
                     <option value="Энергетика">Энергетика</option>
-                    <option value="Строительство">Строительство</option>
+                    <option value="Строительство">Строичество</option>
                 </select>
             </div>
         </div>
