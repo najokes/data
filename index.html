@@ -598,13 +598,13 @@
                         </tr>
                     </thead>
                     <tbody id="companiesTableBody">
-                        <!-- Данные будут загружены через JavaScript -->
+                        <!-- Данные будут загружены автоматически -->
                     </tbody>
                 </table>
             </div>
             
             <div class="pagination" id="pagination">
-                <!-- Пагинация будет загружена через JavaScript -->
+                <!-- Пагинация будет загружена автоматически -->
             </div>
             
             <div class="export-section">
@@ -672,8 +672,10 @@
 
         // Инициализация базы данных при загрузке страницы
         function initializeDatabase() {
+            console.log("Начинаю инициализацию базы данных...");
+            
             // Генерация компаний
-            for (let i = 0; i < 100; i++) {
+            for (let i = 0; i < 50; i++) {
                 const sector = companyDataGenerator.sectors[Math.floor(Math.random() * companyDataGenerator.sectors.length)];
                 const inn = companyDataGenerator.generateINN();
                 const name = companyDataGenerator.generateCompanyName();
@@ -703,6 +705,8 @@
             
             // Добавляем реальные компании
             addRealCompanies();
+            
+            console.log(`База данных создана: ${Object.keys(companiesDatabase).length} компаний`);
             
             // Автоматически рендерим таблицу при загрузке
             renderCompaniesTable();
@@ -815,104 +819,6 @@
                     description: "Нефтяная компания, добыча и переработка нефти",
                     sector: "Энергетика",
                     logo: "Л"
-                },
-                {
-                    inn: "7705031674",
-                    name: "АО 'Роснефть'",
-                    description: "Нефтяная компания, вертикально интегрированный холдинг",
-                    sector: "Энергетика",
-                    logo: "Р"
-                },
-                {
-                    inn: "7712037061",
-                    name: "ПАО 'Сбербанк Лизинг'",
-                    description: "Лизинговые услуги для корпоративных клиентов",
-                    sector: "Финансы",
-                    logo: "С"
-                },
-                {
-                    inn: "7708503727",
-                    name: "ООО 'М.Видео'",
-                    description: "Сеть магазинов бытовой техники и электроники",
-                    sector: "Ритейл",
-                    logo: "М"
-                },
-                {
-                    inn: "7709345589",
-                    name: "ООО 'ВкусВилл'",
-                    description: "Сеть магазинов фермерских продуктов и органической еды",
-                    sector: "Ритейл",
-                    logo: "В"
-                },
-                {
-                    inn: "7706709406",
-                    name: "ПАО 'Ростелеком'",
-                    description: "Телекоммуникационная компания, цифровые услуги",
-                    sector: "Телекоммуникации",
-                    logo: "Р"
-                },
-                {
-                    inn: "7707049488",
-                    name: "ООО 'Тинькофф'",
-                    description: "Финансовые технологии, онлайн-банкинг",
-                    sector: "Финансы",
-                    logo: "Т"
-                },
-                {
-                    inn: "7707055009",
-                    name: "АО 'Озон'",
-                    description: "Электронная коммерция, маркетплейс",
-                    sector: "Ритейл",
-                    logo: "О"
-                },
-                {
-                    inn: "7702029398",
-                    name: "ПАО 'ВТБ'",
-                    description: "Банковская группа, финансовые услуги",
-                    sector: "Финансы",
-                    logo: "В"
-                },
-                {
-                    inn: "7702075800",
-                    name: "ПАО 'Московская биржа'",
-                    description: "Финансовая биржа, торговые площадки",
-                    sector: "Финансы",
-                    logo: "М"
-                },
-                {
-                    inn: "7709216194",
-                    name: "ООО 'Альфа-Банк'",
-                    description: "Частный банк, финансовые услуги",
-                    sector: "Финансы",
-                    logo: "А"
-                },
-                {
-                    inn: "7713011330",
-                    name: "ООО 'СДЭК'",
-                    description: "Логистическая компания, курьерская доставка",
-                    sector: "Транспорт",
-                    logo: "С"
-                },
-                {
-                    inn: "7720543764",
-                    name: "ООО 'АШАН'",
-                    description: "Сеть гипермаркетов, розничная торговля",
-                    sector: "Ритейл",
-                    logo: "А"
-                },
-                {
-                    inn: "7710030411",
-                    name: "ООО 'Метро Кэш энд Керри'",
-                    description: "Оптовая торговля, cash & carry",
-                    sector: "Ритейл",
-                    logo: "М"
-                },
-                {
-                    inn: "7708514824",
-                    name: "ООО 'Эльдорадо'",
-                    description: "Сеть магазинов бытовой техники и электроники",
-                    sector: "Ритейл",
-                    logo: "Э"
                 }
             ];
             
@@ -966,12 +872,7 @@
                 "Производство": "sector-manufacturing",
                 "Финансы": "sector-finance",
                 "Энергетика": "sector-energy",
-                "Строительство": "sector-construction",
-                "Транспорт": "sector-tech",
-                "Здравоохранение": "sector-finance",
-                "Телекоммуникации": "sector-tech",
-                "Недвижимость": "sector-construction",
-                "Сельское хозяйство": "sector-manufacturing"
+                "Строительство": "sector-construction"
             };
             return classes[sector] || "sector-tech";
         }
@@ -984,12 +885,7 @@
                 "Производство": "#fbbc05",
                 "Финансы": "#34a853",
                 "Энергетика": "#8b4513",
-                "Строичество": "#ff6b35",
-                "Транспорт": "#4a4e69",
-                "Здравоохранение": "#9d4edd",
-                "Телекоммуникации": "#0077b6",
-                "Недвижимость": "#fb8500",
-                "Сельское хозяйство": "#386641"
+                "Строительство": "#ff6b35"
             };
             return colors[sector] || "#d32f2f";
         }
@@ -1010,8 +906,15 @@
 
         // Рендеринг таблицы компаний
         function renderCompaniesTable() {
+            console.log("Начинаю рендеринг таблицы...");
+            
             const tableBody = document.getElementById('companiesTableBody');
             const pagination = document.getElementById('pagination');
+            
+            if (!tableBody) {
+                console.error("Элемент companiesTableBody не найден!");
+                return;
+            }
             
             // Фильтрация компаний
             let filteredCompanies = Object.entries(companiesDatabase).map(([inn, company]) => ({ inn, ...company }));
@@ -1034,6 +937,7 @@
             
             // Общее количество компаний
             totalCompanies = filteredCompanies.length;
+            console.log(`Всего компаний после фильтрации: ${totalCompanies}`);
             const totalPages = Math.ceil(totalCompanies / companiesPerPage);
             
             // Пагинация
@@ -1045,7 +949,7 @@
             tableBody.innerHTML = '';
             
             // Заполнение таблицы
-            companiesToShow.forEach((company) => {
+            companiesToShow.forEach((company, index) => {
                 const roi = company.historicalRoi;
                 const roiClass = roi >= 15 ? 'roi-positive' : (roi >= 10 ? '' : 'roi-negative');
                 const sectorColor = getSectorColor(company.sector);
@@ -1082,6 +986,8 @@
             
             // Обновление статистики
             updateStats();
+            
+            console.log("Рендеринг таблицы завершен");
         }
 
         // Рендеринг пагинации
@@ -1400,6 +1306,8 @@
 
         // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
+            console.log("Страница полностью загружена, начинаю инициализацию...");
+            
             // Инициализация базы данных
             initializeDatabase();
             
@@ -1409,6 +1317,8 @@
                     searchCompanies();
                 }
             });
+            
+            console.log("Инициализация завершена");
         });
     </script>
 </body>
