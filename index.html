@@ -545,6 +545,138 @@
             overflow-y: auto;
         }
         
+        /* Таблица компаний */
+        .companies-table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+        
+        .companies-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .companies-table th {
+            background: #f8f9fa;
+            color: #1a237e;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #e0e0e0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .companies-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+        
+        .companies-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .company-row {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .company-row:hover {
+            background-color: #e8eaf6 !important;
+            transform: translateX(3px);
+        }
+        
+        .company-row.selected {
+            background-color: #e3f2fd !important;
+            border-left: 4px solid #1a237e;
+        }
+        
+        .sector-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .sector-tech {
+            background: rgba(66, 133, 244, 0.1);
+            color: #4285f4;
+            border: 1px solid rgba(66, 133, 244, 0.2);
+        }
+        
+        .sector-retail {
+            background: rgba(234, 67, 53, 0.1);
+            color: #ea4335;
+            border: 1px solid rgba(234, 67, 53, 0.2);
+        }
+        
+        .sector-manufacturing {
+            background: rgba(251, 188, 5, 0.1);
+            color: #fbbc05;
+            border: 1px solid rgba(251, 188, 5, 0.2);
+        }
+        
+        .sector-finance {
+            background: rgba(52, 168, 83, 0.1);
+            color: #34a853;
+            border: 1px solid rgba(52, 168, 83, 0.2);
+        }
+        
+        .sector-energy {
+            background: rgba(139, 69, 19, 0.1);
+            color: #8b4513;
+            border: 1px solid rgba(139, 69, 19, 0.2);
+        }
+        
+        .sector-construction {
+            background: rgba(255, 107, 53, 0.1);
+            color: #ff6b35;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+        }
+        
+        .company-logo-small {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+        
+        .company-name-cell {
+            display: flex;
+            align-items: center;
+        }
+        
+        .metric-value-cell {
+            text-align: right;
+            font-weight: 600;
+            color: #1a237e;
+        }
+        
+        .roi-positive {
+            color: #27ae60;
+            font-weight: 700;
+        }
+        
+        .roi-negative {
+            color: #e74c3c;
+            font-weight: 700;
+        }
+        
         .metric-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -970,117 +1102,89 @@
             font-size: 0.95rem;
         }
         
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
+        .table-actions {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            z-index: 1001;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .modal {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: modalSlideIn 0.3s ease;
-        }
-        
-        .modal-title {
-            color: #1a237e;
-            margin-bottom: 25px;
-            font-size: 1.5rem;
-            font-weight: 600;
-            text-align: center;
-        }
-        
-        .modal-input-group {
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
-        .modal-label {
-            display: block;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: 600;
+        .table-search {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px 15px;
+            border: 1px solid #c5cae9;
+            border-radius: 8px;
             font-size: 0.95rem;
         }
         
-        .modal-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-            background: white;
-            color: #333;
-            border: 1px solid #c5cae9;
-        }
-        
-        .modal-input:focus {
+        .table-search:focus {
             outline: none;
             border-color: #1a237e;
             box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
         }
         
-        .modal-buttons {
+        .table-filters {
             display: flex;
-            gap: 15px;
-            margin-top: 25px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
-        .modal-btn {
-            flex: 1;
-            padding: 14px;
-            border-radius: 8px;
-            font-weight: 600;
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #666;
             cursor: pointer;
             transition: all 0.3s;
-            border: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
-        .modal-btn.primary {
-            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
-            color: white;
-        }
-        
-        .modal-btn.primary:hover {
-            background: linear-gradient(135deg, #283593 0%, #3949ab 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(26, 35, 126, 0.2);
-        }
-        
-        .modal-btn.secondary {
-            background: #f8f9fa;
-            color: #666;
-            border: 1px solid #ddd;
-        }
-        
-        .modal-btn.secondary:hover {
+        .filter-btn:hover {
             background: #e9ecef;
-            transform: translateY(-2px);
         }
         
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .filter-btn.active {
+            background: #1a237e;
+            color: white;
+            border-color: #1a237e;
         }
         
-        @keyframes modalSlideIn {
-            from { transform: translateY(-30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            align-items: center;
+        }
+        
+        .page-btn {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .page-btn:hover:not(:disabled) {
+            background: #e9ecef;
+        }
+        
+        .page-btn.active {
+            background: #1a237e;
+            color: white;
+            border-color: #1a237e;
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -1092,11 +1196,11 @@
                 <p class="subtitle">База данных: 1000+ компаний с метриками для анализа</p>
             </div>
             <div class="header-actions">
-                <button class="header-btn" onclick="openAddCompanyModal()">
+                <button class="header-btn" onclick="addNewCompany()">
                     <span style="font-size: 1.2rem;">+</span> Добавить компанию
                 </button>
                 <button class="header-btn primary" onclick="loadTemplateCompanies()">
-                    📁 Загрузить по шаблону
+                    📁 Загрузить шаблон CSV
                 </button>
             </div>
         </header>
@@ -1140,8 +1244,8 @@
                     <button class="action-btn" onclick="searchRandomCompany()">
                         🎲 Случайная компания
                     </button>
-                    <button class="action-btn secondary" onclick="showDatabaseInfo()">
-                        📊 Инфо о базе
+                    <button class="action-btn secondary" onclick="showAllCompanies()">
+                        📊 Показать все
                     </button>
                 </div>
                 
@@ -1169,63 +1273,67 @@
         </div>
         
         <div class="results-section">
-            <div class="empty-results" id="emptyResults">
-                <div class="empty-results-icon">🏢</div>
-                <h3>База данных компаний для инвестиционного анализа</h3>
-                <p>Введите ИНН компании в поле слева для получения подробного анализа и рекомендаций по внедрению ИИ. База содержит 1247 компаний с полными финансовыми показателями.</p>
-                <div style="display: flex; gap: 15px; margin-top: 30px;">
-                    <button class="search-by-inn-btn" style="width: auto; padding: 15px 30px;" onclick="searchRandomCompany()">
-                        🎲 Случайная компания
-                    </button>
-                    <button class="action-btn" style="width: auto; padding: 15px 30px;" onclick="openAddCompanyModal()">
-                        + Добавить свою компанию
-                    </button>
+            <div class="companies-table-container">
+                <h2 class="section-title">База данных компаний</h2>
+                
+                <div class="table-actions">
+                    <input type="text" 
+                           class="table-search" 
+                           id="tableSearch" 
+                           placeholder="Поиск по названию или ИНН..."
+                           onkeyup="searchCompanies()">
+                    
+                    <div class="table-filters">
+                        <button class="filter-btn active" onclick="filterBySector('all')">Все</button>
+                        <button class="filter-btn" onclick="filterBySector('Технологии')">Технологии</button>
+                        <button class="filter-btn" onclick="filterBySector('Финансы')">Финансы</button>
+                        <button class="filter-btn" onclick="filterBySector('Ритейл')">Ритейл</button>
+                        <button class="filter-btn" onclick="filterBySector('Производство')">Производство</button>
+                    </div>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="companies-table" id="companiesTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%;">Компания</th>
+                                <th style="width: 15%;">Сектор</th>
+                                <th style="width: 15%;">ИНН</th>
+                                <th style="width: 15%;">ROI</th>
+                                <th style="width: 15%;">Инвестиции</th>
+                                <th style="width: 10%;">Клиенты</th>
+                            </tr>
+                        </thead>
+                        <tbody id="companiesTableBody">
+                            <!-- Данные будут загружены через JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination" id="pagination">
+                    <!-- Пагинация будет загружена через JavaScript -->
                 </div>
             </div>
             
             <div class="results-container hidden" id="resultsContainer">
-                <!-- Результаты будут вставлены сюда -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Модальное окно добавления компании -->
-    <div class="modal-overlay hidden" id="addCompanyModal">
-        <div class="modal">
-            <h2 class="modal-title">Добавить новую компанию</h2>
-            <div class="modal-input-group">
-                <label class="modal-label">Название компании</label>
-                <input type="text" class="modal-input" id="modalCompanyName" placeholder="ООО 'Пример Компании'">
-            </div>
-            <div class="modal-input-group">
-                <label class="modal-label">ИНН</label>
-                <input type="text" class="modal-input" id="modalCompanyINN" placeholder="1234567890" maxlength="12">
-            </div>
-            <div class="modal-input-group">
-                <label class="modal-label">Описание</label>
-                <input type="text" class="modal-input" id="modalCompanyDesc" placeholder="Сфера деятельности, количество сотрудников и т.д.">
-            </div>
-            <div class="modal-input-group">
-                <label class="modal-label">Сектор экономики</label>
-                <select class="modal-input" id="modalCompanySector">
-                    <option value="tech">Технологии</option>
-                    <option value="retail">Ритейл</option>
-                    <option value="manufacturing">Производство</option>
-                    <option value="finance">Финансы</option>
-                    <option value="energy">Энергетика</option>
-                    <option value="construction">Строительство</option>
-                    <option value="transport">Транспорт</option>
-                    <option value="healthcare">Здравоохранение</option>
-                </select>
-            </div>
-            <div class="modal-buttons">
-                <button class="modal-btn secondary" onclick="closeAddCompanyModal()">Отмена</button>
-                <button class="modal-btn primary" onclick="addNewCompany()">Добавить компанию</button>
+                <!-- Результаты анализа будут вставлены сюда -->
             </div>
         </div>
     </div>
 
     <script>
+        // Хранилище компаний
+        let companiesDatabase = {};
+        let originalValues = {};
+        let currentAnalysisData = null;
+        let draggedCard = null;
+        let cardOrder = ['base', 'rd', 'customer', 'infrastructure'];
+        let currentCompanyId = null;
+        let currentPage = 1;
+        const companiesPerPage = 20;
+        let currentFilter = 'all';
+        let currentSearch = '';
+
         // Генератор случайных данных для компаний
         const companyDataGenerator = {
             sectors: [
@@ -1236,14 +1344,8 @@
             
             companyTypes: ["ООО", "АО", "ПАО", "ЗАО", "ИП"],
             
-            regions: [
-                "Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань",
-                "Нижний Новгород", "Челябинск", "Самара", "Омск", "Ростов-на-Дону",
-                "Уфа", "Красноярск", "Пермь", "Воронеж", "Волгоград"
-            ],
-            
             generateINN: () => {
-                const prefix = Math.random() > 0.5 ? "77" : "78"; // Москва или СПб
+                const prefix = Math.random() > 0.5 ? "77" : "78";
                 const middle = Math.floor(Math.random() * 900000000).toString().padStart(9, '0');
                 const control = Math.floor(Math.random() * 10);
                 return prefix + middle + control;
@@ -1267,15 +1369,7 @@
             }
         };
 
-        // Хранилище компаний (1000+ компаний)
-        let companiesDatabase = {};
-        let originalValues = {};
-        let currentAnalysisData = null;
-        let draggedCard = null;
-        let cardOrder = ['base', 'rd', 'customer', 'infrastructure'];
-        let currentCompanyId = null;
-
-        // Инициализация базы данных со 1000+ компаний
+        // Инициализация базы данных
         function initializeDatabase() {
             console.log("Инициализация базы данных с компаниями...");
             
@@ -1286,7 +1380,7 @@
                 const name = companyDataGenerator.generateCompanyName();
                 const description = companyDataGenerator.generateDescription(sector);
                 
-                // Генерация реалистичных метрик на основе сектора
+                // Генерация реалистичных метрик
                 const metrics = generateSectorMetrics(sector);
                 
                 companiesDatabase[inn] = {
@@ -1337,12 +1431,12 @@
             
             console.log(`База данных инициализирована: ${Object.keys(companiesDatabase).length} компаний`);
             updateDatabaseStats();
+            renderCompaniesTable();
         }
 
         // Генерация метрик на основе сектора
         function generateSectorMetrics(sector) {
             const baseMetrics = {
-                // Технологии: высокие ROI, высокие R&D расходы
                 "Технологии": {
                     investmentAmount: Math.floor(Math.random() * 500000000) + 50000000,
                     investmentPeriod: 24 + Math.floor(Math.random() * 24),
@@ -1362,7 +1456,6 @@
                     ineffectiveInvestments: 15 + Math.random() * 25
                 },
                 
-                // Ритейл: средние ROI, много клиентов
                 "Ритейл": {
                     investmentAmount: Math.floor(Math.random() * 300000000) + 30000000,
                     investmentPeriod: 18 + Math.floor(Math.random() * 18),
@@ -1382,7 +1475,6 @@
                     ineffectiveInvestments: 20 + Math.random() * 25
                 },
                 
-                // Производство: средние ROI, высокие CAPEX
                 "Производство": {
                     investmentAmount: Math.floor(Math.random() * 800000000) + 100000000,
                     investmentPeriod: 36 + Math.floor(Math.random() * 36),
@@ -1402,7 +1494,6 @@
                     ineffectiveInvestments: 25 + Math.random() * 25
                 },
                 
-                // Финансы: высокие ROI, низкие CAPEX
                 "Финансы": {
                     investmentAmount: Math.floor(Math.random() * 1000000000) + 100000000,
                     investmentPeriod: 24 + Math.floor(Math.random() * 24),
@@ -1423,7 +1514,6 @@
                 }
             };
             
-            // Если сектор не найден, используем средние значения
             const defaultMetrics = {
                 investmentAmount: Math.floor(Math.random() * 500000000) + 50000000,
                 investmentPeriod: 24 + Math.floor(Math.random() * 24),
@@ -1446,7 +1536,7 @@
             return baseMetrics[sector] || defaultMetrics;
         }
 
-        // Цвета для разных секторов
+        // Цвета для секторов
         function getSectorColor(sector) {
             const colors = {
                 "Технологии": "#4285f4",
@@ -1463,6 +1553,25 @@
                 "Образование": "#7209b7"
             };
             return colors[sector] || "#1a237e";
+        }
+
+        // Класс для бейджа сектора
+        function getSectorClass(sector) {
+            const classes = {
+                "Технологии": "sector-tech",
+                "Ритейл": "sector-retail",
+                "Производство": "sector-manufacturing",
+                "Финансы": "sector-finance",
+                "Энергетика": "sector-energy",
+                "Строительство": "sector-construction",
+                "Транспорт": "sector-tech",
+                "Здравоохранение": "sector-finance",
+                "Телекоммуникации": "sector-tech",
+                "Недвижимость": "sector-construction",
+                "Сельское хозяйство": "sector-manufacturing",
+                "Образование": "sector-finance"
+            };
+            return classes[sector] || "sector-tech";
         }
 
         // Добавление демонстрационных компаний
@@ -1597,6 +1706,220 @@
                     }
                 };
             });
+        }
+
+        // Форматирование чисел
+        function formatNumber(num) {
+            if (!num && num !== 0) return '—';
+            const numValue = typeof num === 'string' ? parseFloat(num.replace(/\s/g, '').replace('₽', '').replace('млн', '').replace(',', '.')) : num;
+            if (isNaN(numValue)) return '—';
+            
+            if (numValue >= 1000000000) {
+                return (numValue / 1000000000).toFixed(2).replace('.', ',') + ' млрд';
+            }
+            
+            if (numValue >= 1000000) {
+                return (numValue / 1000000).toFixed(1).replace('.', ',') + ' млн';
+            }
+            
+            return numValue.toLocaleString('ru-RU', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        }
+
+        // Рендеринг таблицы компаний
+        function renderCompaniesTable() {
+            const tableBody = document.getElementById('companiesTableBody');
+            const pagination = document.getElementById('pagination');
+            
+            // Фильтрация компаний
+            let filteredCompanies = Object.values(companiesDatabase);
+            
+            // Применение фильтра по сектору
+            if (currentFilter !== 'all') {
+                filteredCompanies = filteredCompanies.filter(company => company.sector === currentFilter);
+            }
+            
+            // Применение поиска
+            if (currentSearch) {
+                const searchLower = currentSearch.toLowerCase();
+                filteredCompanies = filteredCompanies.filter(company => 
+                    company.name.toLowerCase().includes(searchLower) || 
+                    company.sector.toLowerCase().includes(searchLower) ||
+                    Object.keys(companiesDatabase).find(inn => inn.includes(currentSearch) && companiesDatabase[inn] === company)
+                );
+            }
+            
+            // Общее количество компаний
+            const totalCompanies = filteredCompanies.length;
+            const totalPages = Math.ceil(totalCompanies / companiesPerPage);
+            
+            // Пагинация
+            const startIndex = (currentPage - 1) * companiesPerPage;
+            const endIndex = startIndex + companiesPerPage;
+            const companiesToShow = filteredCompanies.slice(startIndex, endIndex);
+            
+            // Очистка таблицы
+            tableBody.innerHTML = '';
+            
+            // Заполнение таблицы
+            companiesToShow.forEach((company, index) => {
+                const inn = Object.keys(companiesDatabase).find(key => companiesDatabase[key] === company);
+                const roi = parseFloat(company.historicalRoi);
+                const roiClass = roi >= 15 ? 'roi-positive' : (roi >= 10 ? '' : 'roi-negative');
+                
+                const row = document.createElement('tr');
+                row.className = 'company-row';
+                row.dataset.inn = inn;
+                row.onclick = () => selectCompanyFromTable(inn);
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="company-name-cell">
+                            <div class="company-logo-small" style="background: linear-gradient(135deg, ${company.color} 0%, ${company.color}99 100%);">${company.logo}</div>
+                            <div>
+                                <div style="font-weight: 600; color: #1a237e;">${company.name}</div>
+                                <div style="font-size: 0.85rem; color: #666; margin-top: 4px;">${company.details.substring(0, 60)}...</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="sector-badge ${getSectorClass(company.sector)}">${company.sector}</span></td>
+                    <td><code style="background: #f8f9fa; padding: 4px 8px; border-radius: 4px;">${inn}</code></td>
+                    <td class="metric-value-cell ${roiClass}">${roi.toFixed(1)}%</td>
+                    <td class="metric-value-cell">${formatNumber(parseInt(company.investmentAmount))}</td>
+                    <td class="metric-value-cell">${parseInt(company.customerCount).toLocaleString()}</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            // Рендеринг пагинации
+            renderPagination(pagination, totalPages, currentPage);
+            
+            // Обновление статистики
+            document.getElementById('statCompanies').textContent = Object.keys(companiesDatabase).length.toLocaleString();
+            document.getElementById('statUpdated').textContent = new Date().toLocaleDateString('ru-RU');
+            
+            // Подсчет "активных" компаний (ROI > 10%)
+            let activeCount = 0;
+            Object.values(companiesDatabase).forEach(company => {
+                if (parseFloat(company.historicalRoi) > 10) {
+                    activeCount++;
+                }
+            });
+            document.getElementById('statActive').textContent = activeCount.toLocaleString();
+        }
+
+        // Рендеринг пагинации
+        function renderPagination(container, totalPages, currentPage) {
+            container.innerHTML = '';
+            
+            // Кнопка "Назад"
+            const prevBtn = document.createElement('button');
+            prevBtn.className = 'page-btn';
+            prevBtn.innerHTML = '←';
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderCompaniesTable();
+                }
+            };
+            container.appendChild(prevBtn);
+            
+            // Страницы
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, startPage + 4);
+            
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => {
+                    currentPage = i;
+                    renderCompaniesTable();
+                };
+                container.appendChild(pageBtn);
+            }
+            
+            // Кнопка "Вперед"
+            const nextBtn = document.createElement('button');
+            nextBtn.className = 'page-btn';
+            nextBtn.innerHTML = '→';
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderCompaniesTable();
+                }
+            };
+            container.appendChild(nextBtn);
+        }
+
+        // Выбор компании из таблицы
+        function selectCompanyFromTable(inn) {
+            document.getElementById('innInput').value = inn;
+            searchByINN();
+            
+            // Подсветка выбранной строки
+            document.querySelectorAll('.company-row').forEach(row => {
+                row.classList.remove('selected');
+                if (row.dataset.inn === inn) {
+                    row.classList.add('selected');
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        }
+
+        // Поиск по таблице
+        function searchCompanies() {
+            currentSearch = document.getElementById('tableSearch').value;
+            currentPage = 1;
+            renderCompaniesTable();
+        }
+
+        // Фильтрация по сектору
+        function filterBySector(sector) {
+            currentFilter = sector;
+            currentPage = 1;
+            
+            // Обновление активных кнопок фильтров
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderCompaniesTable();
+        }
+
+        // Показать все компании
+        function showAllCompanies() {
+            currentFilter = 'all';
+            currentSearch = '';
+            currentPage = 1;
+            document.getElementById('tableSearch').value = '';
+            
+            // Обновление активных кнопок фильтров
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelectorAll('.filter-btn')[0].classList.add('active');
+            
+            renderCompaniesTable();
+        }
+
+        // Показать уведомление
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
 
         // Данные для плашек с бегунками
@@ -1781,39 +2104,6 @@
                 ]
             }
         };
-
-        // Форматирование чисел
-        function formatNumber(num) {
-            if (!num && num !== 0) return '—';
-            const numValue = typeof num === 'string' ? parseFloat(num.replace(/\s/g, '').replace('₽', '').replace('млн', '').replace(',', '.')) : num;
-            if (isNaN(numValue)) return '—';
-            
-            if (numValue >= 1000000000) {
-                return (numValue / 1000000000).toFixed(2).replace('.', ',') + ' млрд';
-            }
-            
-            if (numValue >= 1000000) {
-                return (numValue / 1000000).toFixed(1).replace('.', ',') + ' млн';
-            }
-            
-            return numValue.toLocaleString('ru-RU', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0
-            });
-        }
-
-        // Показать уведомление
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
-        }
 
         // Создание перемещаемых плашек с бегунками
         function createInputCards() {
@@ -2140,6 +2430,9 @@
             // Активируем кнопку расчета
             checkRequiredFields();
             
+            // Показываем результаты
+            document.getElementById('resultsContainer').classList.remove('hidden');
+            
             showNotification(`Данные компании "${company.name}" загружены`, 'success');
         }
 
@@ -2168,79 +2461,22 @@
             searchByINN();
         }
 
-        // Показать информацию о базе данных
-        function showDatabaseInfo() {
-            const totalCompanies = Object.keys(companiesDatabase).length;
-            const sectors = {};
-            
-            // Подсчет компаний по секторам
-            Object.values(companiesDatabase).forEach(company => {
-                sectors[company.sector] = (sectors[company.sector] || 0) + 1;
-            });
-            
-            let sectorInfo = "Распределение по секторам:\n";
-            Object.entries(sectors).forEach(([sector, count]) => {
-                const percentage = ((count / totalCompanies) * 100).toFixed(1);
-                sectorInfo += `• ${sector}: ${count} компаний (${percentage}%)\n`;
-            });
-            
-            showNotification(`Всего компаний в базе: ${totalCompanies}\n${sectorInfo}`, 'info');
-        }
-
-        // Обновление статистики базы данных
-        function updateDatabaseStats() {
-            document.getElementById('statCompanies').textContent = Object.keys(companiesDatabase).length.toLocaleString();
-            document.getElementById('statUpdated').textContent = new Date().toLocaleDateString('ru-RU');
-            
-            // Подсчет "активных" компаний (ROI > 10%)
-            let activeCount = 0;
-            Object.values(companiesDatabase).forEach(company => {
-                if (parseFloat(company.historicalRoi) > 10) {
-                    activeCount++;
-                }
-            });
-            document.getElementById('statActive').textContent = activeCount.toLocaleString();
-        }
-
-        // Открыть модальное окно добавления компании
-        function openAddCompanyModal() {
-            document.getElementById('addCompanyModal').classList.remove('hidden');
-        }
-
-        // Закрыть модальное окно добавления компании
-        function closeAddCompanyModal() {
-            document.getElementById('addCompanyModal').classList.add('hidden');
-            // Очистка полей
-            document.getElementById('modalCompanyName').value = '';
-            document.getElementById('modalCompanyINN').value = '';
-            document.getElementById('modalCompanyDesc').value = '';
-        }
-
         // Добавить новую компанию
         function addNewCompany() {
-            const name = document.getElementById('modalCompanyName').value.trim();
-            const inn = document.getElementById('modalCompanyINN').value.trim();
-            const desc = document.getElementById('modalCompanyDesc').value.trim();
-            const sector = document.getElementById('modalCompanySector').value;
+            // Генерация случайной компании
+            const sector = companyDataGenerator.sectors[Math.floor(Math.random() * companyDataGenerator.sectors.length)];
+            const inn = companyDataGenerator.generateINN();
+            const name = companyDataGenerator.generateCompanyName();
+            const description = companyDataGenerator.generateDescription(sector);
             
-            if (!name || !inn || !desc) {
-                showNotification('Заполните все обязательные поля', 'error');
-                return;
-            }
-            
-            if (companiesDatabase[inn]) {
-                showNotification('Компания с таким ИНН уже существует', 'error');
-                return;
-            }
-            
-            // Генерация метрик на основе сектора
+            // Генерация метрик
             const metrics = generateSectorMetrics(sector);
             
             // Добавление компании в базу данных
             companiesDatabase[inn] = {
                 id: `custom_${Date.now()}`,
                 name: name,
-                details: desc,
+                details: description,
                 sector: sector,
                 logo: name.charAt(0),
                 color: getSectorColor(sector),
@@ -2279,11 +2515,8 @@
                 }
             };
             
-            // Обновление статистики
-            updateDatabaseStats();
-            
-            // Закрытие модального окна
-            closeAddCompanyModal();
+            // Обновление таблицы
+            renderCompaniesTable();
             
             // Автоматическая загрузка добавленной компании
             document.getElementById('innInput').value = inn;
@@ -2292,7 +2525,7 @@
             showNotification(`Компания "${name}" успешно добавлена в базу данных`, 'success');
         }
 
-        // Загрузка компаний по шаблону
+        // Загрузка шаблона CSV
         function loadTemplateCompanies() {
             const templateCompanies = [
                 {
@@ -2371,7 +2604,7 @@
                 }
             });
             
-            updateDatabaseStats();
+            renderCompaniesTable();
             showNotification(`Добавлено ${addedCount} новых компаний по шаблону. Всего в базе: ${Object.keys(companiesDatabase).length} компаний`, 'success');
         }
 
@@ -2397,7 +2630,6 @@
             // Получаем исторические данные компании
             let company = null;
             if (currentCompanyId) {
-                // Находим компанию по ИНН из поля ввода
                 const innInput = document.getElementById('innInput').value.trim();
                 company = companiesDatabase[innInput];
             }
@@ -2415,28 +2647,15 @@
             let aiImprovements;
             if (company && company.id === "mobit") {
                 aiImprovements = {
-                    // ROI с ИИ (из ВКР: с 15% до 21%)
                     roi: 21.0,
-                    
-                    // Сокращение оттока (из ВКР: с 10% до 7%)
                     churnReduction: 7.0,
-                    
-                    // Эффективность R&D (из ВКР: с 40% до 65%)
                     rdEfficiency: 65,
-                    
-                    // Сокращение сроков окупаемости (из ВКР: с 24 до 19 мес.)
                     paybackImprovement: 19,
-                    
-                    // Прогноз LTV
                     segmentHigh: Math.round(customerCount * 0.15),
                     ltvGrowth: Math.round(avgLtv * 1.32),
-                    
-                    // Экономия инфраструктуры (из ВКР: незапланированные простои -40%)
                     downtimeReduction: parseFloat((unplannedDowntime * 0.6).toFixed(1)),
                     capexSavings: Math.round(infraCapex * 0.15),
                     maintenanceSavings: Math.round(maintenanceCost * 0.22),
-                    
-                    // KPI после внедрения ИИ
                     portfolioRoiWithAI: 21.0,
                     ineffectiveInvestmentsAI: 17.0,
                     paybackPeriodAI: 19,
@@ -2493,10 +2712,6 @@
             // Активируем кнопки экспорта
             document.getElementById('exportPdfBtn').disabled = false;
             document.getElementById('exportExcelBtn').disabled = false;
-            
-            // Скрываем пустое состояние и показываем результаты
-            document.getElementById('emptyResults').classList.add('hidden');
-            document.getElementById('resultsContainer').classList.remove('hidden');
             
             showNotification('Анализ завершен. Получены рекомендации по внедрению ИИ', 'success');
         }
@@ -2773,13 +2988,6 @@
             document.getElementById('innInput').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchByINN();
-                }
-            });
-            
-            // Добавляем обработчик закрытия модального окна при клике вне его
-            document.getElementById('addCompanyModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeAddCompanyModal();
                 }
             });
         });
